@@ -1,0 +1,27 @@
+:root {
+    --Mint-Cream: #F7FFF7;
+    --Jet: #343434;
+    --Glauscous: #758ECD;
+    --Yello-Crayyola: #FFE66D;
+    --Deep-Saffron: #FA9F42;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: var(--Mint-Cream);
+}
