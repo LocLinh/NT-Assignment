@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent box-shadow mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CustomersView</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Điều khoản</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mr-auto">
+            <ul class="navbar-nav flex-grow-1">
+                <li>
+                    <div class="input-group nav-link search-box">
+                        <input type="text" placeholder="Tên sản phẩm ..." class="input-search"/>
+                        <span class="search-btn">
+                            <i class="fa-solid fa-magnifying-glass "></i>
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link text-dark" href="#"> Đăng nhập</a>
+                </li>
+                <li>
+                    <a class="nav-link text-dark" href="#"> Đăng ký</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<script src="~/js/navbar.js"></script>
