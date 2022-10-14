@@ -1,4 +1,19 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WebApi.Areas.Identity.Data;
+using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<ProductDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext") ?? throw new InvalidOperationException("Connection string 'ProductDbContext' not found.")));
+builder.Services.AddDbContext<ProductCategoryDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductCatagoryDbContext") ?? throw new InvalidOperationException("Connection string 'ProductCatagoryDbContext' not found.")));
+var connectionString = builder.Configuration.GetConnectionString("UserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbContextConnection' not found.");
+
+builder.Services.AddDbContext<UserDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<UserDbContext>();
 
 // Add services to the container.
 
@@ -17,6 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
