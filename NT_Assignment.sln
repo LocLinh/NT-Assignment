@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{B69C9205-43FD-4819-95F7-9D598B313CB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomersView", "CustomersView\CustomersView.csproj", "{7B366C4F-6E49-4925-9E18-729378038E31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomersView", "CustomersView\CustomersView.csproj", "{7B366C4F-6E49-4925-9E18-729378038E31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
