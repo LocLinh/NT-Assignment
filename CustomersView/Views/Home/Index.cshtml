@@ -1,24 +1,45 @@
-﻿@model IEnumerable<CustomersView.Models.Products>
+﻿@using System.Globalization
+@model IEnumerable<CustomersView.Models.Products>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Items</h1>
-    <p>insert item cards here</p>
+<link rel="stylesheet" href="~/css/productcard.css" />
+<section id="product1" class="text-center">
+    <h2>Feature products</h2>
+    <p>Winter Collection New Morden Design</p>
+    <div class="pro-container">
     @if (Model != null)
     {
-        <ul>
-            @foreach (var p in Model)
-            {
-                <li>
-                    @Html.DisplayFor(modelItem => p.Id)
-                    @Html.DisplayFor(modelItem => p.Name)
-                    @Html.DisplayFor(modelItem => p.Description)
-                    @Html.DisplayFor(modelItem => p.Price)
-                </li>
-            }
-        </ul>
+        @foreach (var p in Model)
+        {
+            <div class="pro" id="@Html.DisplayFor(modelItem => p.Id)">
+                <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" alt="" />
+                <div class="des">
+                    <span>@Html.DisplayFor(modelItem => p.Name)</span>
+                    <h5>@Html.DisplayFor(modelItem => p.Description)</h5>
+                    <div class="star">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div> 
+                    @{var newPrice = p.Price;
+                    var newerPrice = String.Format("{0:N0}", newPrice);}
+                    <h4>@newerPrice VNĐ</h4>
+                </div>
+            </div>
+        }
     }
-    @Html.ValidationSummary()
-</div>
+    else
+    {
+        <h1>
+            Server error!
+        </h1>
+        <p>
+            Cannot get items from database
+        </p>
+        @Html.ValidationSummary()
+    }
+    </div>
+</section>
