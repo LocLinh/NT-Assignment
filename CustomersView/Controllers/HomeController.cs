@@ -30,18 +30,42 @@ namespace CustomersView.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("Application/Json"));
 
                 HttpResponseMessage getData = await client.GetAsync("Products");
+
                 if (getData.IsSuccessStatusCode)
                 {
                     string results = getData.Content.ReadAsStringAsync().Result;
                     products = JsonConvert.DeserializeObject<IEnumerable<Products>>(results);
+
+                }
+            }
+            return View(products);
+        }
+
+        // GET: HomeController1/Details/5
+        public async Task<IActionResult> ProductDetail(int Id)
+        {
+            Products product = new Products();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("Application/Json"));
+
+                HttpResponseMessage getData = await client.GetAsync($"Products/{Id}");
+
+                if (getData.IsSuccessStatusCode)
+                {
+                    string result = getData.Content.ReadAsStringAsync().Result;
+                    product = JsonConvert.DeserializeObject<Products>(result);
+
                 }
                 else
                 {
-                    Console.WriteLine("error");
-                }
 
+                }
             }
-            return View(products);
+            return View(product);
         }
 
         public IActionResult Privacy()

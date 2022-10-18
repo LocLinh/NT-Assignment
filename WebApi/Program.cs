@@ -12,7 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("UserDbContextC
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<UserDbContext>();
 
 // Add services to the container.

@@ -6,7 +6,7 @@
 /*anh phai duoi 400px*/
 #product1 .pro {
     width: 23%;
-    height: 420px;
+    height: 450px;
     min-width: 250px;
     padding: 10px 12px;
     border: 1px solid #cce7d0;
@@ -22,11 +22,12 @@
     padding: 0;
 }
 
-#product1 .pro img:hover {
-    border-radius: 25px 25px 0px 0px;
-}
-
 #product1 .pro img {
     width: 100%;
-    border-radius: 20px;
+    border-radius: 25px;
 }
+
+.pro {
+    transform: rotate(0);
+}
+

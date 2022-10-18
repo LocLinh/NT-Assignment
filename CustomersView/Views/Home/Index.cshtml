@@ -3,10 +3,8 @@
 @{
     ViewData["Title"] = "Trang chủ";
 }
-<link rel="stylesheet" href="~/css/productcard.css" />
+<link rel="stylesheet" href="~/css/productcard.css" asp-append-version="true" />
 <section id="product1" class="text-center">
-    <h2>Feature products</h2>
-    <p>Winter Collection New Morden Design</p>
     <div class="pro-container">
     @if (Model != null)
     {
@@ -16,7 +14,7 @@
                 <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" alt="" />
                 <div class="des">
                     <span>@Html.DisplayFor(modelItem => p.Name)</span>
-                    <h5>@Html.DisplayFor(modelItem => p.Description)</h5>
+                    @*<h5>@Html.DisplayFor(modelItem => p.Description)</h5>*@
                     <div class="star">
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-star"></i>
@@ -27,6 +25,7 @@
                     @{var newPrice = p.Price;
                     var newerPrice = String.Format("{0:N0}", newPrice);}
                     <h4>@newerPrice VNĐ</h4>
+                    <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.Id" class="stretched-link"></a>
                 </div>
             </div>
         }

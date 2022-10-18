@@ -1,26 +1,4 @@
-﻿/*span.search-icon {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    transform: translateY(-10%);
-}
-input.search-box {
-    padding-left: 25px;
-    width : 0;
-    opacity: 0;
-    transition: width ease 1s;
-    animation-direction: reverse;
-}
-
-input.search-box:focus {
-    width : 100%;
-    opacity: 100%;  
-}
-
-.search-container {
-  display: inline-block;
-}*/
-.search-box {
+﻿.search-box {
     padding-top: 0px;
     position: relative;
     width: 250px;   
@@ -48,4 +26,55 @@ input.search-box:focus {
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
+}
+li .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .animate {
+        animation-duration: 0.2s;
+        -webkit-animation-duration: 0.2s;
+        animation-fill-mode: both;
+        -webkit-animation-fill-mode: both;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-1rem);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0rem);
+        opacity: 1;
+    }
+
+    0% {
+        transform: translateY(-1rem);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes slideIn {
+    0% {
+        -webkit-transform: transform;
+        -webkit-opacity: 0;
+    }
+
+    100% {
+        -webkit-transform: translateY(0);
+        -webkit-opacity: 1;
+    }
+
+    0% {
+        -webkit-transform: translateY(-1rem);
+        -webkit-opacity: 0;
+    }
+}
+
+.slideIn {
+    -webkit-animation-name: slideIn;
+    animation-name: slideIn;
 }
