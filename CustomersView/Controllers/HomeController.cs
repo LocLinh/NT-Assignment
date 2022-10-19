@@ -37,6 +37,12 @@ namespace CustomersView.Controllers
                     products = JsonConvert.DeserializeObject<IEnumerable<Products>>(results);
 
                 }
+                string qParams = Request.Query["Category"];
+                if (qParams != null)
+                {
+                    ViewBag.value = qParams;
+                    products = products.Where(p => p.CategoryId.ToString() == qParams);
+                }
             }
             return View(products);
         }
@@ -58,10 +64,6 @@ namespace CustomersView.Controllers
                 {
                     string result = getData.Content.ReadAsStringAsync().Result;
                     product = JsonConvert.DeserializeObject<Products>(result);
-
-                }
-                else
-                {
 
                 }
             }

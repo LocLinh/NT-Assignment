@@ -1,10 +1,16 @@
-﻿namespace WebApi.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApi.Model
 {
     public class CartItems
     {
+        [Key]
         public int Id { get; set; }
-        public int CartId { get; set; }
+        [Required]
+        public int UserId { get; set; }
+        [Required]
         public int ProductId { get; set; }
-        public int Quantity { get; set; }
+        [Required]
+        public int Quantity { get; set; } = 1;
     }
 }
