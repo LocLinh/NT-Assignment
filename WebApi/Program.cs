@@ -35,7 +35,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();;
 
 app.UseAuthorization();
-
 app.MapControllers();
-
+app.UseCors(x => x.WithMethods()
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .WithOrigins("https://localhost:7058/")
+    );
 app.Run();

@@ -78,7 +78,14 @@
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link text-dark pe-3" href="/cart"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a class="nav-link text-dark pe-3" href="/cart">
+                        <i class="fa-solid fa-cart-shopping position-relative">
+                            <span id="cart-items-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" value=0>
+                                0
+                                <span class="visually-hidden">items in cart</span>
+                            </span>
+                        </i>
+                    </a>
                 </li>
                 <li>
                     <a class="nav-link text-dark" href="#"> Đăng nhập</a>

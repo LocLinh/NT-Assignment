@@ -29,9 +29,11 @@
 				<p class="product-description">@Model.Description</p>
 				<h4 class="price"><span>@String.Format("{0:N0}", Model.Price) VNĐ</span></h4>
 				<div class="action">
-					<button class="add-to-cart btn btn-default" type="button">thêm vào giỏ hàng</button>
+					<button class="add-to-cart btn btn-default" type="button" onclick="addItem(@Model.Id)">thêm vào giỏ hàng</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script src="~/js/productdetail.js"></script>
