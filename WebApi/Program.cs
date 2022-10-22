@@ -14,7 +14,14 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<UserDbContext>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7058", "https://localhost:7151");
+        });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -36,9 +43,5 @@ app.UseAuthentication();;
 
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors(x => x.WithMethods()
-                .AllowCredentials()
-                .AllowAnyHeader()
-                .WithOrigins("https://localhost:7058/")
-    );
+app.UseCors();
 app.Run();

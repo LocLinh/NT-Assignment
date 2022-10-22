@@ -5,9 +5,15 @@ namespace CustomersView.Controllers
 {
     public class CartController : Controller
     {
+        private readonly IHttpContextAccessor _context;
+        public CartController(IHttpContextAccessor httpContextAccessor)
+        {
+            _context = httpContextAccessor;
+        }
         // GET: Cart/
         public ActionResult Index()
         {
+            _context.HttpContext.Session.SetString("hello", "world");
             return View();
         }
 
