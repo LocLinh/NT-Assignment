@@ -4,20 +4,18 @@
 
     if (categoryId in cartItems) {
         cartItems[categoryId] += 1;
-    }
-    else {
+    } else {
         cartItems[categoryId] = 1;
     }
 
-    var sumItems = obj => Object.values(obj).reduce((sum, currValue) => sum + currValue, 0);
-    var allItems = sumItems(cartItems)
+    var sumItems = (obj) => Object.keys(obj).length;
+    var allItems = sumItems(cartItems);
 
     if (allItems >= 99) {
         badge.innerHTML = "99+";
-    }
-    else {
+    } else {
         badge.innerHTML = allItems;
     }
-    sessionStorage.setItem("itemCount", JSON.stringify(cartItems))
+    sessionStorage.setItem("itemCount", JSON.stringify(cartItems));
     //console.log(sessionStorage.itemCount);
-}
+};

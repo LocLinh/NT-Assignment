@@ -8,6 +8,20 @@
     } VNĐ`;
 }
 
+function handleRemoveItem(id) {
+    var cartItems = JSON.parse(sessionStorage.itemCount);
+    delete cartItems[id];
+    console.log(cartItems);
+    sessionStorage.itemCount = JSON.stringify(cartItems);
+    console.log(sessionStorage.itemCount);
+    document.getElementById(`product-no${id}`).remove();
+}
+
+function handleCalculateTotalPrice() {
+    var cartItems = JSON.parse(sessionStorage.itemCount);
+    var totalPrice = cartItems.map;
+}
+
 const getCartItems = async () => {
     try {
         var response = await fetch("https://localhost:7151/api/Products");
@@ -18,7 +32,7 @@ const getCartItems = async () => {
             return item.id in cartItems;
         });
         var item = cartProducts.map((product, index) => {
-            return `<div>
+            return `<div id="product-no${product.id}">
                 <hr class="my-4">
                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                     <div class="col-md-2 col-lg-2 col-xl-2">
@@ -52,15 +66,19 @@ const getCartItems = async () => {
                 product.price
             }">${product.price * cartItems[product.id]} VNĐ</h6>
                     </div>
-                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                    <div class="col-md-1 col-lg-1 col-xl-1 text-end" >
+                        <a onclick="handleRemoveItem(${
+                            product.id
+                        })" class="text-muted"><i class="fas fa-times"></i></a>
                     </div>
                 </div>
             </div>`;
         });
+
+        container.innerHTML = "";
         item.map((i) => (container.innerHTML += i));
         console.log(item);
-        return cartProducts;
+        return products;
     } catch (error) {
         console.log(error);
         return null;
