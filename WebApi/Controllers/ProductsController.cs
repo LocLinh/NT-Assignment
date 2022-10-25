@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Data;
+using WebApi.Dto;
 using WebApi.Model;
 
 namespace WebApi.Controllers
@@ -14,10 +11,10 @@ namespace WebApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductDbContext _context;
+        private readonly WebApiDbContext _context;
         public readonly IMapper _mapper;
 
-        public ProductsController(ProductDbContext context, IMapper mapper)
+        public ProductsController(WebApiDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -27,15 +24,17 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Products>>> GetProductsModel()
         {
-            return await _context.ProductsModel.Select(product => _mapper.Map<Products>(product)).ToListAsync();
+            //var productList = await _context.products.Include(product => product.Categories).ToListAsync();
+            //var productsPublic = productList.Select(product => _mapper.Map<ProductDtoGet>(product));
+            return await _context.products.Include(product => product.Categories).ToListAsync();
+            //return Ok(productsPublic);
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Products>> GetProductsModel(int id)
         {
-            var productsModel = await _context.ProductsModel.FindAsync(id);
-
+            var productsModel = await _context.products.Include(product => product.Categories).FirstOrDefaultAsync(product => product.Id == id);
             if (productsModel == null)
             {
                 return NotFound();
@@ -47,9 +46,8 @@ namespace WebApi.Controllers
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        
-        public async Task<IActionResult> PutProductsModel(int id,[FromForm] Products productsModel)
-        { 
+        public async Task<IActionResult> PutProductsModel(int id,Products productsModel)
+        {
             if (id != productsModel.Id)
             {
                 return BadRequest();
@@ -79,9 +77,9 @@ namespace WebApi.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Products>> PostProductsModel([FromForm] Products productsModel)
+        public async Task<ActionResult<Products>> PostProductsModel(Products productsModel)
         {
-            _context.ProductsModel.Add(productsModel);
+            _context.products.Add(productsModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProductsModel", new { id = productsModel.Id }, productsModel);
@@ -91,13 +89,13 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductsModel(int id)
         {
-            var productsModel = await _context.ProductsModel.FindAsync(id);
+            var productsModel = await _context.products.FindAsync(id);
             if (productsModel == null)
             {
                 return NotFound();
             }
 
-            _context.ProductsModel.Remove(productsModel);
+            _context.products.Remove(productsModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -105,7 +103,7 @@ namespace WebApi.Controllers
 
         private bool ProductsModelExists(int id)
         {
-            return _context.ProductsModel.Any(e => e.Id == id);
+            return _context.products.Any(e => e.Id == id);
         }
     }
 }

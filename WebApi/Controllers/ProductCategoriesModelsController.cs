@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Data;
 using WebApi.Model;
 
 namespace WebApi.Controllers
@@ -13,9 +14,9 @@ namespace WebApi.Controllers
     [ApiController]
     public class ProductCategoriesModelsController : ControllerBase
     {
-        private readonly ProductCategoryDbContext _context;
+        private readonly WebApiDbContext _context;
 
-        public ProductCategoriesModelsController(ProductCategoryDbContext context)
+        public ProductCategoriesModelsController(WebApiDbContext context)
         {
             _context = context;
         }
@@ -24,14 +25,14 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductCategories>>> GetProductCategoriesModel()
         {
-            return await _context.ProductCategoriesModel.ToListAsync();
+            return await _context.productCategories.ToListAsync();
         }
 
         // GET: api/ProductCategoriesModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductCategories>> GetProductCategoriesModel(int id)
         {
-            var productCategoriesModel = await _context.ProductCategoriesModel.FindAsync(id);
+            var productCategoriesModel = await _context.productCategories.FindAsync(id);
 
             if (productCategoriesModel == null)
             {
@@ -78,7 +79,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<ProductCategories>> PostProductCategoriesModel(ProductCategories productCategoriesModel)
         {
             Console.WriteLine(productCategoriesModel);
-            _context.ProductCategoriesModel.Add(productCategoriesModel);
+            _context.productCategories.Add(productCategoriesModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProductCategoriesModel", new { id = productCategoriesModel.Id }, productCategoriesModel);
@@ -88,13 +89,13 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductCategoriesModel(int id)
         {
-            var productCategoriesModel = await _context.ProductCategoriesModel.FindAsync(id);
+            var productCategoriesModel = await _context.productCategories.FindAsync(id);
             if (productCategoriesModel == null)
             {
                 return NotFound();
             }
 
-            _context.ProductCategoriesModel.Remove(productCategoriesModel);
+            _context.productCategories.Remove(productCategoriesModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +103,7 @@ namespace WebApi.Controllers
 
         private bool ProductCategoriesModelExists(int id)
         {
-            return _context.ProductCategoriesModel.Any(e => e.Id == id);
+            return _context.productCategories.Any(e => e.Id == id);
         }
     }
 }

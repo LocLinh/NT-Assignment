@@ -7,16 +7,10 @@ namespace WebApi.Model
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        [ForeignKey("Users")]
         public int UserId { get; set; }
-        [Required]
-        [ForeignKey("Products")]
         public int ProductId { get; set; }
-        [Required]
         public int Quantity { get; set; } = 1;
-
-        public virtual Users Users { get; set; }
-        public virtual Products Products { get; set; }
+        public Users User { get; set; }
+        public Products Product { get; set; }
     }
 }

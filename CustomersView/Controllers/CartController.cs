@@ -13,7 +13,6 @@ namespace CustomersView.Controllers
         // GET: Cart/
         public ActionResult Index()
         {
-            _context.HttpContext.Session.SetString("hello", "world");
             return View();
         }
 

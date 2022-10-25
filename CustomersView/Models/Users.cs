@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 
-namespace WebApi.Model
+namespace CustomersView.Models
 {
     public class Users
     {

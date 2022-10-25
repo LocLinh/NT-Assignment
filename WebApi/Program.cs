@@ -4,13 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ProductDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext") ?? throw new InvalidOperationException("Connection string 'ProductDbContext' not found.")));
-builder.Services.AddDbContext<ProductCategoryDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductCatagoryDbContext") ?? throw new InvalidOperationException("Connection string 'ProductCatagoryDbContext' not found.")));
-var connectionString = builder.Configuration.GetConnectionString("UserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbContextConnection' not found.");
+
+builder.Services.AddDbContext<WebApiDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
 
 
 builder.Services.AddCors(options =>

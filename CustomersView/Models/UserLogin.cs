@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Model
+namespace CustomersView.Models
 {
     public class UserLogin
     {

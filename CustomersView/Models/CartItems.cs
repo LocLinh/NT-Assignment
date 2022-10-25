@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CustomersView.Models
 {
@@ -6,11 +7,10 @@ namespace CustomersView.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public int UserId { get; set; }
-        [Required]
         public int ProductId { get; set; }
-        [Required]
         public int Quantity { get; set; } = 1;
+        public Users User { get; set; }
+        public Products Product { get; set; }
     }
 }
