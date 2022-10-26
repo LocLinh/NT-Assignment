@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\login.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Client\" />
     <Folder Include="Views\Pages\" />
     <Folder Include="wwwroot\images\" />

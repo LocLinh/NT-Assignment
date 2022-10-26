@@ -11,9 +11,10 @@ html {
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 18px;
+    }
+
 }
 
 html {
@@ -21,21 +22,16 @@ html {
   min-height: 100%;
 }
 
-body {/*
-  margin-bottom: 60px;
+body {
   background-color: var(--Mint-Cream);
-}*/
+}
 
 @media screen and (min-width:768px) and (max-width:991px) {
     body {
-        padding-top: 500px;
-        margin-top: 500px;
     }
 }
 
 @media screen and (min-width:992px) and (max-width:1199px) {
     body {
-        padding-top: 500px;
-        margin-top: 500px;
     }
 }
