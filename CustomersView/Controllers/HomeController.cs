@@ -1,9 +1,12 @@
 ﻿using CustomersView.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 namespace CustomersView.Controllers
@@ -43,6 +46,7 @@ namespace CustomersView.Controllers
                     ViewBag.value = qParams;
                     products = products.Where(p => p.CategoryId.ToString() == qParams);
                 }
+                
             }
             return View(products);
         }
@@ -67,9 +71,9 @@ namespace CustomersView.Controllers
 
                 }
             }
+
             return View(product);
         }
-
         public IActionResult Privacy()
         {
             return View();

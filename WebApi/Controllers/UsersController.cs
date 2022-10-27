@@ -25,8 +25,14 @@ namespace WebApi.Controllers
         [HttpGet("Public")]
         public IActionResult Public()
         {
-            return Ok("you are not ok");
+            var currentUser = GetCurrentUser();
+            return Ok(currentUser.Username);
         }
+
+        //public IActionResult CurrentUser()
+        //{
+        //    return Ok(GetCurrentUser());
+        //}
 
         private Users GetCurrentUser()
         {

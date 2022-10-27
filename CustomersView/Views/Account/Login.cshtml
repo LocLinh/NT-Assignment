@@ -1,6 +1,7 @@
 ﻿@*
 	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model CustomersView.Models.UserLogin 
 @{
 	Layout = null;
 }
@@ -25,7 +26,7 @@
 		</div>
 	</nav>
 	<!-- partial:index.partial.html -->
-	<form>
+	<form method="post">
 		<div class="svgContainer">
 			<div>
 				<svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -198,24 +199,26 @@
 
 		<div class="inputGroup inputGroup1">
 			<label for="loginEmail" id="loginEmailLabel">Email</label>
-			<input type="email" id="loginEmail" maxlength="254" />
-			<p class="helper helper1">email@domain.com</p>
+			<input type="text" id="loginEmail" maxlength="254" asp-for="Username" />
+			<p class="helper helper1">your username</p>
+			<span asp-validation-for="Username" class="text-danger"></span>
 		</div>
 		<div class="inputGroup inputGroup2">
 			<label for="loginPassword" id="loginPasswordLabel">Password</label>
-			<input type="password" id="loginPassword" />
+			<input type="password" id="loginPassword" asp-for="Password"  />
 			<label id="showPasswordToggle" for="showPasswordCheck">
 				Show
 				<input id="showPasswordCheck" type="checkbox" />
 				<div class="indicator"></div>
 			</label>
+			<span asp-validation-for="Password" class="text-danger"></span>
 		</div>
 		<div class="inputGroup inputGroup3">
-			<button id="login">Log in</button>
+			<button id="login" type="submit">Log in</button>
 		</div>
 		<div>
 			<p class="text-center">If you don't have an acount, register now.</p>
-			<button>
+			<button asp-controller="AccountController" asp-action="Register" >
 				Regiser
 			</button>
 		</div>
@@ -225,7 +228,10 @@
 	<script src='http://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=182'></script>
 	<script src="~/js/login.js"></script>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	
 </body>
 
 </html>
