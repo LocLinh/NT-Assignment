@@ -1,6 +1,7 @@
 ﻿@model Products
 @{
-    ViewData["Title"] = Model.Name;
+	ViewData["Title"] = Model.Name;
+	var token = Context.Request.Cookies["JwtToken"];
 }
 
 <link href="~/css/productdetail.css" rel="stylesheet" asp-append-version="true" />
@@ -10,7 +11,8 @@
 			<div class="preview col-md-6">
 				<div class="preview-pic tab-content">
 					<div class="" id="">
-						<img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" />
+						<img
+							src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" />
 					</div>
 				</div>
 			</div>
@@ -29,9 +31,45 @@
 				<p class="product-description">@Model.Description</p>
 				<h4 class="price"><span>@String.Format("{0:N0}", Model.Price) VNĐ</span></h4>
 				<div class="action">
-					<button class="add-to-cart btn btn-default" type="button" onclick="addItem(@Model.Id)">thêm vào giỏ hàng</button>
+					<button class="add-to-cart btn btn-default" type="button" onclick="addItem(@Model.Id)">thêm vào giỏ
+						hàng</button>
 				</div>
+
+				<hr />
+				<form>
+					<div class="mb-3">
+						<span><b>Rating: </b></span>
+						<div class="rate">
+							<input type="radio" id="star5" name="rate" value="5" checked />
+							<label for="star5" title="5 sao"><span class="fa fa-star"></span></label>
+							<input type="radio" id="star4" name="rate" value="4" />
+							<label for="star4" title="4 sao"><span class="fa fa-star"></span></label>
+							<input type="radio" id="star3" name="rate" value="3" />
+							<label for="star3" title="3 sao"><span class="fa fa-star"></span></label>
+							<input type="radio" id="star2" name="rate" value="2" />
+							<label for="star2" title="2 sao"><span class="fa fa-star"></span></label>
+							<input type="radio" id="star1" name="rate" value="1" />
+							<label for="star1" title="1 sao"><span class="fa fa-star"></span></label>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="exampleFormControlTextarea1" class="form-label">Nhận xét của bạn:</label>
+						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					</div>
+					<button type="submit" class="btn btn-warning" id="submit_btn">Submit</button>
+				</form>
+				@if (!string.IsNullOrEmpty(token))
+				{
+				}
+				else
+				{
+					<hr />
+					<a class="btn btn-outline-warning" asp-controller="Account" asp-action="Login" role="button">Đăng nhập
+						để có thể bình luận.</a>
+				}
 			</div>
+		</div>
+		<div class="row">
 		</div>
 	</div>
 </div>

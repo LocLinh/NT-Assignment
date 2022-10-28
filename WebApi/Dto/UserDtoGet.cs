@@ -1,15 +1,12 @@
-﻿using Microsoft.Build.Framework;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CustomersView.Models
+namespace WebApi.Dto
 {
-    public class Users
+    public class UserDtoGet
     {
-        [Key]
-        public int Id { get; set; }
+        [StringLength(50, ErrorMessage = "Username is too long.")]
+        [RegularExpression("^[a-zA-Z][a-zA-Z0-9_]{5, 49}")]
         public string Username { get; set; }
-        
-        public string Password { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
         public string FirstName { get; set; }

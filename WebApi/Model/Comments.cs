@@ -9,11 +9,12 @@ namespace WebApi.Model
         [Key]
         public int Id { get; set; }
         public string Content { get; set; } = String.Empty;
-        public int Rate { get; set; }
+        [Range(0, 5)]
+        public int Rate { get; set; } = 5;
         public int ProductId { get; set; }
         public int UserId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime ModifiedAt { get; set; }
+        public DateTime ModifiedAt { get; set; } = DateTime.Now;
         public Products Products { get; set; }
         public Users Users { get; set; }
     }
