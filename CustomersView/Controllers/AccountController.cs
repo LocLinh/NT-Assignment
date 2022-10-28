@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NuGet.Common;
+using NuGet.Frameworks;
 using System.Security.Claims;
 using System.Text;
 
@@ -36,10 +37,16 @@ namespace CustomersView.Controllers
 
 			}
 
-			return View();
+			return RedirectToAction("Index", "Home");
 		}
 
-		private void SetJWTCookie(string token)
+        public IActionResult Logout()
+        {
+			Response.Cookies.Delete("JwtToken");
+			return RedirectToAction("Index", "Home");
+        }
+
+        private void SetJWTCookie(string token)
 		{
 			var cookieOption = new CookieOptions()
 			{
