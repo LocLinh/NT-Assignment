@@ -36,30 +36,30 @@
 				</div>
 
 				<hr />
-				<form>
-					<div class="mb-3">
-						<span><b>Rating: </b></span>
-						<div class="rate">
-							<input type="radio" id="star5" name="rate" value="5" checked />
-							<label for="star5" title="5 sao"><span class="fa fa-star"></span></label>
-							<input type="radio" id="star4" name="rate" value="4" />
-							<label for="star4" title="4 sao"><span class="fa fa-star"></span></label>
-							<input type="radio" id="star3" name="rate" value="3" />
-							<label for="star3" title="3 sao"><span class="fa fa-star"></span></label>
-							<input type="radio" id="star2" name="rate" value="2" />
-							<label for="star2" title="2 sao"><span class="fa fa-star"></span></label>
-							<input type="radio" id="star1" name="rate" value="1" />
-							<label for="star1" title="1 sao"><span class="fa fa-star"></span></label>
-						</div>
-					</div>
-					<div class="mb-3">
-						<label for="exampleFormControlTextarea1" class="form-label">Nhận xét của bạn:</label>
-						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-					</div>
-					<button type="submit" class="btn btn-warning" id="submit_btn">Submit</button>
-				</form>
 				@if (!string.IsNullOrEmpty(token))
 				{
+					<form>
+						<div class="mb-3">
+							<span><b>Rating: </b></span>
+							<div class="rate">
+								<input type="radio" id="star5" name="rate" value="5" checked />
+								<label for="star5" title="5 sao"><span class="fa fa-star"></span></label>
+								<input type="radio" id="star4" name="rate" value="4" />
+								<label for="star4" title="4 sao"><span class="fa fa-star"></span></label>
+								<input type="radio" id="star3" name="rate" value="3" />
+								<label for="star3" title="3 sao"><span class="fa fa-star"></span></label>
+								<input type="radio" id="star2" name="rate" value="2" />
+								<label for="star2" title="2 sao"><span class="fa fa-star"></span></label>
+								<input type="radio" id="star1" name="rate" value="1" />
+								<label for="star1" title="1 sao"><span class="fa fa-star"></span></label>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label for="exampleFormControlTextarea1" class="form-label">Nhận xét của bạn:</label>
+							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+						</div>
+						<button type="submit" class="btn btn-warning" id="submit_btn">Submit</button>
+					</form>
 				}
 				else
 				{
