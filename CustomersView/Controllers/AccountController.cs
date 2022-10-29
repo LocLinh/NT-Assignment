@@ -5,6 +5,7 @@ using NuGet.Common;
 using NuGet.Frameworks;
 using System.Security.Claims;
 using System.Text;
+using WebApi.Dto;
 
 namespace CustomersView.Controllers
 {
@@ -45,6 +46,19 @@ namespace CustomersView.Controllers
 			Response.Cookies.Delete("JwtToken");
 			return RedirectToAction("Index", "Home");
         }
+
+		// Get 
+		public IActionResult Register()
+		{
+			return View();
+		}
+
+		// Register user
+		[HttpPost]
+		public IActionResult Register(UserDtoPost user)
+		{
+			return View();
+		}
 
         private void SetJWTCookie(string token)
 		{

@@ -1,30 +1,17 @@
 ﻿@*
 	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model CustomersView.Models.UserLogin 
+@model CustomersView.Models.UserLogin
 @{
-	Layout = null;
+	Layout = "_LayoutAccount";
+	ViewData["Title"] = "Đăng nhập";
 }
-<!DOCTYPE html>
-<html lang="en">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/login.css">
 
-<head>
-	<meta charset="UTF-8">
-	<title>Login</title>
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
-	<link rel="stylesheet" href="~/css/login.css">
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-</head>
-
-<body>
-	<nav class="navbar navbar-light bg-light">
-		<div class="container-fluid justify-content-md-start justify-content-sm-center">
-			<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CustomersView</a>
-		</div>
-	</nav>
+<section>
 	<!-- partial:index.partial.html -->
 	<form method="post">
 		<div class="svgContainer">
@@ -205,7 +192,7 @@
 		</div>
 		<div class="inputGroup inputGroup2">
 			<label for="loginPassword" id="loginPasswordLabel">Password</label>
-			<input type="password" id="loginPassword" asp-for="Password"  />
+			<input type="password" id="loginPassword" asp-for="Password" />
 			<label id="showPasswordToggle" for="showPasswordCheck">
 				Show
 				<input id="showPasswordCheck" type="checkbox" />
@@ -214,15 +201,16 @@
 			<span asp-validation-for="Password" class="text-danger"></span>
 		</div>
 		<div class="inputGroup inputGroup3">
-			<button id="login" type="submit">Log in</button>
+			<button id="login" type="submit">Đăng nhập</button>
 		</div>
-		<div>
-			<p class="text-center">If you don't have an acount, register now.</p>
-			<button asp-controller="AccountController" asp-action="Register" >
-				Regiser
-			</button>
+		<div class="inputGroup inputGroup3">
+			<p class="text-center mb-2">Nếu chưa có tài khoản, đăng ký ngay.</p>
+			<a class="btn link-btn" asp-action="Register">
+				Đăng ký
+			</a>
 		</div>
 	</form>
+
 	<!-- partial -->
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js'></script>
 	<script src='http://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=182'></script>
@@ -231,7 +219,5 @@
 	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	
-</body>
 
-</html>
+</section>

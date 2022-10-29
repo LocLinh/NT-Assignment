@@ -362,7 +362,7 @@ function initLoginForm() {
 	}
 
 	// clear the console
-	//console.clear();
+	console.clear();
 }
 
 initLoginForm();
