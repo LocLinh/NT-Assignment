@@ -55,8 +55,6 @@ namespace WebApi.Controllers
 
             return Ok(userDto);
         }
-
-
         private Users GetCurrentUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

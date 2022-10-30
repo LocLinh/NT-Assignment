@@ -36,6 +36,14 @@ namespace WebApi.Mapper
                 .ForMember(dest => dest.Address, otp => otp.MapFrom(src => src.Address))
                 .ForMember(dest => dest.Password, otp => otp.MapFrom(src => src.Password))
                 .ForMember(dest => dest.Role, otp => otp.MapFrom(src => "Customer"));
+
+            CreateMap<CommentDtoPost, Comments>()
+                .ForMember(dest => dest.Content, otp => otp.MapFrom(src => src.Content))
+                .ForMember(dest => dest.CreatedAt, otp => otp.MapFrom(src => src.ModifiedAt))
+                .ForMember(dest => dest.ModifiedAt, otp => otp.MapFrom(src => src.ModifiedAt))
+                .ForMember(dest => dest.Rate, otp => otp.MapFrom(src => src.Rate))
+                .ForMember(dest => dest.UserId, otp => otp.MapFrom(async src => { }))
+
         }
     }
 }
