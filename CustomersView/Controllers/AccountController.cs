@@ -1,5 +1,6 @@
 ﻿using CustomersView.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NuGet.Common;
 using NuGet.Frameworks;
@@ -11,7 +12,9 @@ namespace CustomersView.Controllers
 {
 	public class AccountController : Controller
 	{
-		public IActionResult Login()
+		string baseUrl = "https://localhost:7151/account/";
+
+        public IActionResult Login()
 		{
 			return View();
 		}
@@ -28,7 +31,7 @@ namespace CustomersView.Controllers
 
 			using (var client = new HttpClient())
 			{
-				client.BaseAddress = new Uri("https://localhost:7151/account/");
+				client.BaseAddress = new Uri(baseUrl);
 				
 				var response = await client.PostAsync("Login", userData);
 
@@ -55,9 +58,21 @@ namespace CustomersView.Controllers
 
 		// Register user
 		[HttpPost]
-		public IActionResult Register(UserDtoPost user)
+		public async Task<IActionResult> Register(UserDtoPost user)
 		{
-			return View();
+			if (user.PhoneNumber is null)
+			{
+				user.PhoneNumber = "";
+			}
+            var userData = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var response = await client.PostAsync("Users", userData);
+            }
+
+            return View();
 		}
 
         private void SetJWTCookie(string token)
