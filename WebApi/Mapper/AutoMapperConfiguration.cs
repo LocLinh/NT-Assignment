@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using WebApi.Data;
 using WebApi.Dto;
 using WebApi.Model;
 

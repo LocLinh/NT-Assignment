@@ -77,12 +77,27 @@ namespace WebApi.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Products>> PostProductsModel(Products productsModel)
+        public async Task<ActionResult<ProductDtoPost>> PostProductsModel(ProductDtoPost productsModel)
         {
-            _context.products.Add(productsModel);
+            var productcategory = _context.productCategories.FirstOrDefault(category => category.Id == productsModel.CategoryId);
+            if (productcategory == null)
+            {
+                return NotFound("Cửa hàng chúng tôi hiện không nhận loại sản phẩm bạn vừa thêm.");
+            }
+            Products product = new Products
+            {
+                Name = productsModel.Name,
+                Description = productsModel.Description,
+                CategoryId = productsModel.CategoryId,
+                Price = productsModel.Price,
+                DiscountPercent = productsModel.DiscountPercent,
+                ImagePath = productsModel.ImagePath,
+                Categories = productcategory,
+            };
+            _context.products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProductsModel", new { id = productsModel.Id }, productsModel);
+            return CreatedAtAction("GetProductsModel", new { id = product.Id }, product);
         }
 
         // DELETE: api/Products/5
