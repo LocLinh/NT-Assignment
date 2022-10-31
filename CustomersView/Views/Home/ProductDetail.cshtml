@@ -1,7 +1,9 @@
-﻿@model Products
+﻿@model CustomersView.Dto.CommentDtoPost
 @{
-	ViewData["Title"] = Model.Name;
 	var token = Context.Request.Cookies["JwtToken"];
+	Products product = ViewData["product"] as Products;
+	IEnumerable<Comments> comments = ViewData["comments"] as IEnumerable<Comments>;
+	ViewData["Title"] = "product detail";
 }
 
 <link href="~/css/productdetail.css" rel="stylesheet" asp-append-version="true" />
@@ -17,7 +19,7 @@
 				</div>
 			</div>
 			<div class="details col-md-6">
-				<h3 class="product-title">@Model.Name</h3>
+				<h3 class="product-title">@product.Name</h3>
 				<div class="rating">
 					<div class="stars">
 						<span class="fa fa-star checked"></span>
@@ -28,17 +30,54 @@
 					</div>
 					<span class="review-no">41 reviews</span>
 				</div>
-				<p class="product-description">@Model.Description</p>
-				<h4 class="price"><span>@String.Format("{0:N0}", Model.Price) VNĐ</span></h4>
+				<p class="product-description">@product.Description</p>
+				<h4 class="price"><span>@String.Format("{0:N0}", product.Price) VNĐ</span></h4>
 				<div class="action">
-					<button class="add-to-cart btn btn-default" type="button" onclick="addItem(@Model.Id)">thêm vào giỏ
+					<button class="add-to-cart btn btn-default" type="button" onclick="addItem(@product.Id)">
+						thêm vào giỏ
 						hàng</button>
 				</div>
-
 				<hr />
+
+				@if (comments != null)
+				{
+					@foreach (var comment in comments)
+					{
+						<div class="card p-2 lh-1 pb-3">
+							<div class="card-body p-1">
+								<h5 class="card-title d-inline">@comment.Users.Username</h5><span
+							class="fw-lighter">&nbsp;&nbsp;<i class="fa-regular fa-calendar"></i> @((DateTime.Now -
+							comment.ModifiedAt).Days) days ago</span>
+								<div class="star">
+									@for (var i = 1; i <= 5; i++)
+									{
+										@if (i <= comment.Rate)
+										{
+											<span class="fa fa-star checked"></span>
+										}
+										else
+										{
+											<span class="fa fa-star"></span>
+
+										}
+									}
+								</div>
+								<p class="card-text">@comment.Content</p>
+							</div>
+						</div>
+					}
+
+				}
+
 				@if (!string.IsNullOrEmpty(token))
 				{
-					<form>
+
+					<hr />
+
+					<form asp-action="PostComment" method="post">
+						<input value="@ViewBag.username" asp-for="Username" hidden>
+						<input value="@product.Id" asp-for="ProductId" hidden>
+						<input value="5" asp-for="Rate" id="form-rate" hidden>
 						<div class="mb-3">
 							<span><b>Rating: </b></span>
 							<div class="rate">
@@ -56,7 +95,8 @@
 						</div>
 						<div class="mb-3">
 							<label for="exampleFormControlTextarea1" class="form-label">Nhận xét của bạn:</label>
-							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+							asp-for="Content"></textarea>
 						</div>
 						<button type="submit" class="btn btn-warning" id="submit_btn">Submit</button>
 					</form>
@@ -74,4 +114,5 @@
 	</div>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/productdetail.js"></script>

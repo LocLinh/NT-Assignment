@@ -19,3 +19,7 @@
     sessionStorage.setItem("itemCount", JSON.stringify(cartItems));
     //console.log(sessionStorage.itemCount);
 };
+
+$(":radio").change(function () {
+    document.getElementById("form-rate").value = this.value;
+});
