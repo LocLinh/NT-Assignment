@@ -22,11 +22,11 @@ namespace WebApi.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Products>>> GetProductsModel()
+        public async Task<ActionResult<IEnumerable<ProductDtoGet>>> GetProductsModel()
         {
             //var productList = await _context.products.Include(product => product.Categories).ToListAsync();
             //var productsPublic = productList.Select(product => _mapper.Map<ProductDtoGet>(product));
-            return await _context.products.Include(product => product.Categories).ToListAsync();
+            return await _context.products.Include(product => product.Categories).Select(product => _mapper.Map<ProductDtoGet>(product)).ToListAsync();
             //return Ok(productsPublic);
         }
 

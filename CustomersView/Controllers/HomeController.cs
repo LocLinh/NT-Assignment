@@ -26,7 +26,7 @@ namespace CustomersView.Controllers
         // Get all product
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Products> products = null;
+            IEnumerable<ProductDtoGet> products = null;
 
             using (var client = new HttpClient())
             {
@@ -39,7 +39,7 @@ namespace CustomersView.Controllers
                 if (getData.IsSuccessStatusCode)
                 {
                     string results = getData.Content.ReadAsStringAsync().Result;
-                    products = JsonConvert.DeserializeObject<IEnumerable<Products>>(results);
+                    products = JsonConvert.DeserializeObject<IEnumerable<ProductDtoGet>>(results);
 
                 }
                 string qParams = Request.Query["Category"];

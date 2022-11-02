@@ -18,7 +18,12 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("https://localhost:7058", "https://localhost:7151");
+            policy.WithOrigins("https://localhost:7058",
+                "https://localhost:7151",
+                "http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithExposedHeaders("*");
         });
 });
 builder.Services.AddAutoMapper(typeof(Program));
@@ -55,7 +60,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
 app.MapControllers();
