@@ -1,46 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { ColorModeContext, useMode } from "./theme";
+import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { Route, Routes } from "react-router-dom";
-import axios from "axios";
-import Topbar from "./scene/global/Topbar";
-import Dashboard from "./scene/dashboard";
-import Sidebar from "./scene/global/Sidebar";
+import { ColorModeContext, useMode } from "./theme";
 import { ProSidebarProvider } from "react-pro-sidebar";
+import Topbar from "./scenes/global/Topbar";
+import Sidebar from "./scenes/global/Sidebar";
+import Dashboard from "./scenes/dashboard";
+import Products from "./scenes/products";
+import AddProductForm from "./scenes/forms/addProduct";
 
 function App() {
-    const [products, setProducts] = useState([]);
     const [theme, colorMode] = useMode();
-
-    useEffect(() => {
-        axios
-            .get("https://localhost:7151/api/Products")
-            .then((res) => setProducts(res.data));
-    }, []);
+    const [isSidebar, setIsSidebar] = useState(true);
 
     return (
         <ColorModeContext.Provider value={colorMode}>
             <ThemeProvider theme={theme}>
-                <CssBaseline>
-                    <ProSidebarProvider>
-                        <div className="App">
-                            <Sidebar />
-                            <main className="content">
-                                <Topbar />
-                                <Routes>
-                                    <Route path="/" element={<Dashboard />} />
-                                </Routes>
-                                <ul>
-                                    {products.map((product, index) => (
-                                        <li key={index}>
-                                            <h5>{product.name}</h5>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </main>
-                        </div>
-                    </ProSidebarProvider>
-                </CssBaseline>
+                <ProSidebarProvider>
+                    <CssBaseline />
+                    <div className="app">
+                        <Sidebar isSidebar={isSidebar} />
+                        <main className="content">
+                            <Topbar setIsSidebar={setIsSidebar} />
+                            <Routes>
+                                <Route path="/" element={<Dashboard />} />
+                                <Route
+                                    path="/manage-products"
+                                    element={<Products />}
+                                />
+                                <Route
+                                    path="/manage-products/add"
+                                    element={<AddProductForm />}
+                                />
+                            </Routes>
+                        </main>
+                    </div>
+                </ProSidebarProvider>
             </ThemeProvider>
         </ColorModeContext.Provider>
     );
