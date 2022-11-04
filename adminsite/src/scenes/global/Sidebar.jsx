@@ -14,11 +14,21 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     const colors = tokens(theme.palette.mode);
 
     return (
-        <Link to={to} style={{ textDecoration: "none", color: "gray" }}>
+        <Link
+            to={to}
+            style={{ textDecoration: "none", color: "gray" }}
+            sx={[
+                {
+                    "&:hover": {
+                        background: "#000",
+                    },
+                },
+            ]}
+        >
             <MenuItem
                 active={selected === title}
                 style={{
-                    color: colors.grey[100],
+                    color: colors.grey[300],
                 }}
                 onClick={() => setSelected(title)}
                 icon={icon}
@@ -41,24 +51,6 @@ const Sidebar = () => {
             <ProSidebar
                 collapsed={isCollapsed}
                 style={{ border: "none", height: "100vh" }}
-                sx={[
-                    {
-                        "& .pro-sidebar-inner": {
-                            background: `${colors.grey[400]} !important`,
-                        },
-                        "& .pro-icon-wrapper": {
-                            backgroundColor: "transparent !important",
-                        },
-                        "& .pro-inner-item:hover": {
-                            color: "#858585 !important",
-                            background: "#858585",
-                        },
-                        "& .pro-menu-item.active": {
-                            color: "#858585 !important",
-                            background: "#858585",
-                        },
-                    },
-                ]}
             >
                 <Menu
                     style={{

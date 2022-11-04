@@ -26,7 +26,6 @@ const AddProductForm = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
     const handleFormSubmit = (values) => {
-        console.log(values);
         axios
             .post("https://localhost:7151/api/Products", values, {
                 headers: {

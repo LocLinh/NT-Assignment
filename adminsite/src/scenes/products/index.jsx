@@ -1,50 +1,201 @@
-import { Box, useTheme, Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Box, useTheme, Button, Fab, Modal } from "@mui/material";
+import { DataGrid, GridRowModes } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import AddIcon from "@mui/icons-material/Add";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 const handleDeleteProduct = (id) => {
-    console.log(id);
+    axios
+        .delete(`https://localhost:7151/api/Products/${id}`)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+};
+
+const handlePutProduct = (id, product) => {
+    axios
+        .put(`https://localhost:7151/api/Products/${id}`, product, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 };
 
 const Products = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [pageSize, setPageSise] = useState(10);
+    const [editRowsModel, setEditRowsModel] = useState({});
+    const [rowModesModel, setRowModesModel] = useState({});
+    const [open, setOpen] = useState(0);
+    const handleOpen = (id) => {
+        setOpen(id);
+    };
+    const handleClose = () => {
+        setOpen(0);
+    };
+    const handleRowEditStart = (params, event) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleRowEditStop = (params, event) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleEditClick = (id) => () => {
+        setRowModesModel({
+            ...rowModesModel,
+            [id]: { mode: GridRowModes.Edit },
+        });
+    };
+
+    const handleSaveClick = (id) => () => {
+        setRowModesModel({
+            ...rowModesModel,
+            [id]: { mode: "view" },
+        });
+    };
+
+    const handleDeleteClick = (id) => () => {
+        handleDeleteProduct(id);
+        setProducts(products.filter((p) => p.id !== id));
+        handleClose();
+    };
+
+    const handleCancelClick = (id) => () => {
+        setRowModesModel({
+            ...rowModesModel,
+            [id]: { mode: GridRowModes.View, ignoreModifications: true },
+        });
+
+        const editedRow = products.find((row) => row.id === id);
+        if (editedRow.isNew) {
+            setProducts(products.filter((row) => row.id !== id));
+        }
+    };
+
+    const processRowUpdate = (newRow, oldRow) => {
+        const updatedRow = { ...newRow, isNew: false };
+        if (JSON.stringify(newRow) !== JSON.stringify(oldRow)) {
+            setProducts(
+                products.map((row) => (row.id === newRow.id ? updatedRow : row))
+            );
+            handlePutProduct(newRow.id, JSON.stringify(newRow));
+        }
+        return updatedRow;
+    };
+
     useEffect(() => {
         axios
             .get("https://localhost:7151/api/Products")
             .then((res) => setProducts(res.data));
+        axios
+            .get("https://localhost:7151/api/ProductCategoriesModels")
+            .then((res) => setCategories(res.data));
     }, []);
+
+    const handleEditRowsModelChange = useCallback((model) => {
+        setEditRowsModel(model);
+        console.log(model);
+    }, []);
+
     const columns = [
-        { field: "id", headerName: "Id" },
+        { field: "id", headerName: "Id", width: 50 },
         {
             field: "name",
             headerName: "Name",
-            flex: 1,
+            width: 150,
             cellClassName: "name-column--cell",
+            editable: true,
         },
-        { field: "description", headerName: "Description", flex: 1 },
-        { field: "categoryName", headerName: "Category", flex: 1 },
-        { field: "price", headerName: "Price", flex: 1, type: "number" },
-        { field: "discountPercent", headerName: "Discount", type: "number" },
-        { field: "imagePath", headerName: "Image", flex: 1 },
         {
-            field: "Access",
-            headerName: "Access",
+            field: "description",
+            headerName: "Description",
             flex: 1,
-            renderCell: ({ row: { access } }) => {
-                return (
-                    <Box>
+            editable: true,
+        },
+        {
+            field: "categoryName",
+            headerName: "Category",
+            width: 100,
+            editable: true,
+            type: "singleSelect",
+            valueOptions: categories.map((o) => o.name),
+        },
+        {
+            field: "price",
+            headerName: "Price",
+            width: 120,
+            type: "number",
+            editable: true,
+        },
+        {
+            field: "discountPercent",
+            headerName: "Discount",
+            type: "number",
+            editable: true,
+        },
+        { field: "imagePath", headerName: "Image", width: 150, editable: true },
+        {
+            field: "actions",
+            headerName: "Actions",
+            type: "actions",
+            cellClassName: "actions",
+            flex: 0.5,
+            getActions: ({ id }) => {
+                const isInEditMode =
+                    rowModesModel[id]?.mode === GridRowModes.Edit;
+
+                if (isInEditMode) {
+                    return [
+                        <Fab
+                            onClick={handleSaveClick(id)}
+                            color="success"
+                            size="small"
+                        >
+                            <SaveIcon />
+                        </Fab>,
+                        <Fab
+                            onClick={handleCancelClick(id)}
+                            color="secondary"
+                            size="small"
+                        >
+                            <CancelIcon />
+                        </Fab>,
+                    ];
+                }
+                return [
+                    <Fab
+                        onClick={handleEditClick(id)}
+                        color="info"
+                        size="small"
+                    >
                         <BorderColorIcon />
-                        <DeleteIcon onClick={handleDeleteProduct} />
-                    </Box>
-                );
+                    </Fab>,
+                    <Fab
+                        onClick={() => handleOpen(id)}
+                        color="error"
+                        size="small"
+                    >
+                        <DeleteIcon />
+                    </Fab>,
+                ];
             },
         },
     ];
@@ -71,7 +222,57 @@ const Products = () => {
                 },
             }}
         >
-            <DataGrid rows={products} columns={columns}></DataGrid>
+            <DataGrid
+                rows={products}
+                columns={columns}
+                getRowId={(row) => row.id}
+                editMode="row"
+                rowsPerPageOptions={[10, 15, 20]}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSise(newPageSize)}
+                getRowHeight={() => "auto"}
+                getRowSpacing={() => ({
+                    top: 5,
+                    bottom: 5,
+                })}
+                editRowsModel={editRowsModel}
+                onEditRowsModelChange={handleEditRowsModelChange}
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+                onRowEditStart={handleRowEditStart}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                experimentalFeatures={{ newEditingApi: true }}
+            ></DataGrid>
+            <Modal
+                open={open !== 0}
+                onClose={handleClose}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "400px",
+                        backgroundColor: colors.redAccent["400"],
+                        padding: "10px 20px",
+                        border: "2px solid black",
+                        boxShadow: "20px",
+                        textAlign: "center",
+                        fontSize: "bold",
+                    }}
+                >
+                    <h2 id="parent-modal-title">Delete this product</h2>
+                    <p id="parent-modal-description">
+                        This product will be removed forever.
+                    </p>
+                    <Button onClick={handleDeleteClick(open)}>Yes</Button>
+                    <Button onClick={handleClose}>No</Button>
+                </Box>
+            </Modal>
             <Link to="/manage-products/add" style={{ textDecoration: "none" }}>
                 <Button
                     variant="contained"
