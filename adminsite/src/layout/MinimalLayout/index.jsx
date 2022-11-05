@@ -3,7 +3,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Login from "../../scenes/login/Login";
 
-function MainLayout() {
+function MinimalLayout(props) {
     return (
         <>
             <CssBaseline />
@@ -18,4 +18,4 @@ function MainLayout() {
     );
 }
 
-export default MainLayout;
+export default MinimalLayout;

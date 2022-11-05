@@ -1,45 +1,40 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "./theme";
-import { ProSidebarProvider } from "react-pro-sidebar";
-import Topbar from "./scenes/global/Topbar";
-import Sidebar from "./scenes/global/Sidebar";
+// layout
+import Layout from "./Layout";
+import MinimalLayout from "./Layout/MinimalLayout";
+import MainLayout from "./Layout/MainLayout";
+// component
 import Dashboard from "./scenes/dashboard";
 import Products from "./scenes/products";
 import AddProductForm from "./scenes/forms/addProduct";
 import Login from "./scenes/login/Login";
-
+import Users from "./scenes/users";
+import Categories from "./scenes/categories";
 function App() {
-    const [theme, colorMode] = useMode();
-    const [isSidebar, setIsSidebar] = useState(true);
-
     return (
-        <ColorModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
-                <ProSidebarProvider>
-                    <CssBaseline />
-                    <div className="app">
-                        <Sidebar isSidebar={isSidebar} />
-                        <main className="content">
-                            <Topbar setIsSidebar={setIsSidebar} />
-                            <Routes>
-                                <Route path="/" element={<Dashboard />} />
-                                <Route
-                                    path="/manage-products"
-                                    element={<Products />}
-                                />
-                                <Route
-                                    path="/manage-products/add"
-                                    element={<AddProductForm />}
-                                />
-                                <Route path="/login" element={<Login />} />
-                            </Routes>
-                        </main>
-                    </div>
-                </ProSidebarProvider>
-            </ThemeProvider>
-        </ColorModeContext.Provider>
+        <Fragment>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route element={<MainLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="manage-products" element={<Products />} />
+                        <Route
+                            path="manage-products/add"
+                            element={<AddProductForm />}
+                        />
+                        <Route path="Users" element={<Users />} />
+                        <Route
+                            path="manage-categories"
+                            element={<Categories />}
+                        />
+                    </Route>
+                    <Route element={<MinimalLayout />}>
+                        <Route path="login" element={<Login />} />
+                    </Route>
+                </Route>
+            </Routes>
+        </Fragment>
     );
 }
 

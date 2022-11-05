@@ -1,14 +1,8 @@
-const pages = [
-    {
-        exact: true,
-        path: "/login",
-        component: Login,
-        layout: MainLayout,
-    },
-    {
-        exact: false,
-        path: routes.dashboard,
-        component: index,
-        layout: MinimalLayout,
-    },
-];
+import * as React from "react";
+import { Outlet } from "react-router-dom";
+// import MainLayout from "./MainLayout";
+// import MinimalLayout from "./MinimalLayout";
+
+export default function Layout() {
+    return <Outlet />;
+}
