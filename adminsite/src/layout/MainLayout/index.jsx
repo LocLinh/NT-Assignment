@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "./theme";
 import { ProSidebarProvider } from "react-pro-sidebar";
-import Topbar from "./scenes/global/Topbar";
-import Sidebar from "./scenes/global/Sidebar";
-import Dashboard from "./scenes/dashboard";
-import Products from "./scenes/products";
-import AddProductForm from "./scenes/forms/addProduct";
-import Login from "./scenes/login/Login";
+import { ColorModeContext, useMode } from "../../theme";
+import Topbar from "../../scenes/global/Topbar";
+import Sidebar from "../../scenes/global/Sidebar";
+import Dashboard from "../../scenes/dashboard";
+import Products from "../../scenes/products";
+import AddProductForm from "../../scenes/forms/addProduct";
+import Login from "../../scenes/login/Login";
 
-function App() {
+function MainLayout() {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
 
@@ -43,4 +43,4 @@ function App() {
     );
 }
 
-export default App;
+export default MainLayout;

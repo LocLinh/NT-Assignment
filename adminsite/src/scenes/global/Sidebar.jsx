@@ -32,6 +32,13 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
                 }}
                 onClick={() => setSelected(title)}
                 icon={icon}
+                sx={[
+                    {
+                        "&:hover": {
+                            background: "#000",
+                        },
+                    },
+                ]}
             >
                 <Typography>{title}</Typography>
                 {/* <Link to={to} /> */}
@@ -47,7 +54,25 @@ const Sidebar = () => {
     const [selected, setSelected] = useState("Dashboard");
 
     return (
-        <Box>
+        <Box
+            sx={{
+                "& .pro-sidebar-inner": {
+                    background: `${colors.grey[600]} !important`,
+                },
+                "& .pro-icon-wrapper": {
+                    backgroundColor: "transparent !important",
+                },
+                "& .pro-inner-item": {
+                    padding: "5px 35px 5px 20px !important",
+                },
+                ".cxRqFw:hover, .lkTtqM:hover": {
+                    backgroundColor: `${colors.grey[600]}`,
+                },
+                ".cxRqFw, .lkTtqM.ative": {
+                    backgroundColor: `${colors.grey[600]}`,
+                },
+            }}
+        >
             <ProSidebar
                 collapsed={isCollapsed}
                 style={{ border: "none", height: "100vh" }}
