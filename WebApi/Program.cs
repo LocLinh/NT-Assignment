@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApi.Data;
+using WebApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddMvc();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 
 var app = builder.Build();
 

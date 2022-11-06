@@ -1,7 +1,7 @@
 import { Box, useTheme, Button, Fab, Modal } from "@mui/material";
 import { DataGrid, GridRowModes } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,6 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+
 const handleDeleteProduct = (id) => {
     axios
         .delete(`https://localhost:7151/api/Products/${id}`)
@@ -36,13 +37,11 @@ const handlePutProduct = (id, product) => {
 };
 
 const Products = () => {
-    console.log("ready");
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [pageSize, setPageSise] = useState(10);
-    const [editRowsModel, setEditRowsModel] = useState({});
     const [rowModesModel, setRowModesModel] = useState({});
     const [open, setOpen] = useState(0);
     const handleOpen = (id) => {
@@ -71,6 +70,7 @@ const Products = () => {
             ...rowModesModel,
             [id]: { mode: "view" },
         });
+        console.log(rowModesModel);
     };
 
     const handleDeleteClick = (id) => () => {
@@ -97,6 +97,10 @@ const Products = () => {
             setProducts(
                 products.map((row) => (row.id === newRow.id ? updatedRow : row))
             );
+            var newCategory = categories.filter(
+                (o) => o.name === newRow.categoryName
+            );
+            newRow.categoryId = newCategory[0].id;
             handlePutProduct(newRow.id, JSON.stringify(newRow));
         }
         return updatedRow;
@@ -109,11 +113,6 @@ const Products = () => {
         axios
             .get("https://localhost:7151/api/ProductCategoriesModels")
             .then((res) => setCategories(res.data));
-    }, []);
-
-    const handleEditRowsModelChange = useCallback((model) => {
-        setEditRowsModel(model);
-        console.log(model);
     }, []);
 
     const columns = [
@@ -236,8 +235,6 @@ const Products = () => {
                     top: 5,
                     bottom: 5,
                 })}
-                editRowsModel={editRowsModel}
-                onEditRowsModelChange={handleEditRowsModelChange}
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
                 onRowEditStart={handleRowEditStart}

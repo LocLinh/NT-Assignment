@@ -1,21 +1,15 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 // material-ui
 import {
     Button,
-    Checkbox,
-    Divider,
-    FormControlLabel,
     FormHelperText,
     Grid,
-    Link,
     IconButton,
     InputAdornment,
     InputLabel,
     OutlinedInput,
     Stack,
-    Typography,
 } from "@mui/material";
 
 // third party
@@ -26,12 +20,11 @@ import { Formik } from "formik";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
-    const [checked, setChecked] = React.useState(false);
-
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -70,7 +63,15 @@ const AuthLogin = () => {
                             setStatus({ submit: "Successfully log in" });
                             setStatus({ success: true });
                             setSubmitting(false);
-                            console.log(response.data);
+                            // console.log(response.data);
+                            var decode_data = jwt_decode(response.data);
+                            if (
+                                decode_data[
+                                    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                                ] === "Admin"
+                            ) {
+                                console.log("login thanh cong");
+                            }
                         })
                         .catch(function (error) {
                             setErrors({

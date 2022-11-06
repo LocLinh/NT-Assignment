@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
 using WebApi.Model;
+using WebApi.Repository;
 
 namespace WebApi.Controllers
 {
@@ -15,31 +16,33 @@ namespace WebApi.Controllers
     public class ProductCategoriesModelsController : ControllerBase
     {
         private readonly WebApiDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ProductCategoriesModelsController(WebApiDbContext context)
+        public ProductCategoriesModelsController(WebApiDbContext context, ICategoryRepository categoryRepository)
         {
             _context = context;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: api/ProductCategoriesModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductCategories>>> GetProductCategoriesModel()
         {
-            return await _context.productCategories.ToListAsync();
+            return Ok(await _categoryRepository.GetAllCategories());
         }
 
         // GET: api/ProductCategoriesModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductCategories>> GetProductCategoriesModel(int id)
         {
-            var productCategoriesModel = await _context.productCategories.FindAsync(id);
+            var productCategoriesModel = await _categoryRepository.GetOneCategory(id);
 
             if (productCategoriesModel == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return productCategoriesModel;
+            return Ok(productCategoriesModel);
         }
 
         // PUT: api/ProductCategoriesModels/5
@@ -52,11 +55,11 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(productCategoriesModel).State = EntityState.Modified;
+            _categoryRepository.UpdateCategory(productCategoriesModel);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _categoryRepository.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,9 +81,8 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductCategories>> PostProductCategoriesModel(ProductCategories productCategoriesModel)
         {
-            Console.WriteLine(productCategoriesModel);
-            _context.productCategories.Add(productCategoriesModel);
-            await _context.SaveChangesAsync();
+            await _categoryRepository.AddOneCategory(productCategoriesModel);
+            await _categoryRepository.Save();
 
             return CreatedAtAction("GetProductCategoriesModel", new { id = productCategoriesModel.Id }, productCategoriesModel);
         }
@@ -89,14 +91,13 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductCategoriesModel(int id)
         {
-            var productCategoriesModel = await _context.productCategories.FindAsync(id);
-            if (productCategoriesModel == null)
+            var productCategories = await _categoryRepository.GetOneCategory(id);
+            if (productCategories == null)
             {
                 return NotFound();
             }
-
-            _context.productCategories.Remove(productCategoriesModel);
-            await _context.SaveChangesAsync();
+            _categoryRepository.DeleteCategory(productCategories);
+            await _categoryRepository.Save();
 
             return NoContent();
         }
