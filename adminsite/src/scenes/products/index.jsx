@@ -36,6 +36,7 @@ const handlePutProduct = (id, product) => {
 };
 
 const Products = () => {
+    console.log("ready");
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [products, setProducts] = useState([]);

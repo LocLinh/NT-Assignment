@@ -1,15 +1,17 @@
 import { useState, Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
 // layout
-import Layout from "./Layout";
-import MinimalLayout from "./Layout/MinimalLayout";
-import MainLayout from "./Layout/MainLayout";
+import Layout from "./layout";
+import MinimalLayout from "./layout/MinimalLayout";
+import MainLayout from "./layout/MainLayout";
 // component
 import Dashboard from "./scenes/dashboard";
 import Products from "./scenes/products";
 import AddProductForm from "./scenes/forms/addProduct";
 import Login from "./scenes/login/Login";
+import Register from "./scenes/login/Register";
 import Users from "./scenes/users";
+
 import Categories from "./scenes/categories";
 function App() {
     return (
@@ -31,6 +33,7 @@ function App() {
                     </Route>
                     <Route element={<MinimalLayout />}>
                         <Route path="login" element={<Login />} />
+                        <Route path="register" element={<Register />} />
                     </Route>
                 </Route>
             </Routes>

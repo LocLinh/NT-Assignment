@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ProSidebarProvider } from "react-pro-sidebar";
 import { ColorModeContext, useMode } from "../../theme";

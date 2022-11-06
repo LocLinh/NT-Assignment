@@ -8,6 +8,7 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import LoginIcon from "@mui/icons-material/Login";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -141,6 +142,13 @@ const Sidebar = () => {
                             title="Manage categories"
                             to="/manage-categories"
                             icon={<CategoryOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Login"
+                            to="/login"
+                            icon={<LoginIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />

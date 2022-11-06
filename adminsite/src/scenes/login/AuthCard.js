@@ -15,11 +15,8 @@ const AuthCard = ({ children, ...other }) => (
                 flexBasis: "50%",
             },
         }}
-        content={false}
         {...other}
         border={false}
-        boxShadow
-        shadow={(theme) => theme.customShadows.z1}
     >
         <Box sx={{ p: { xs: 2, sm: 3, md: 4, xl: 5 } }}>{children}</Box>
     </Box>

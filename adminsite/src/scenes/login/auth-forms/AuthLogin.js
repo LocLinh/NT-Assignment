@@ -25,6 +25,7 @@ import { Formik } from "formik";
 // assets
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import axios from "axios";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -44,15 +45,13 @@ const AuthLogin = () => {
         <>
             <Formik
                 initialValues={{
-                    email: "info@codedthemes.com",
-                    password: "123456",
-                    submit: null,
+                    username: "",
+                    password: "",
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string()
-                        .email("Must be a valid email")
+                    username: Yup.string()
                         .max(255)
-                        .required("Email is required"),
+                        .required("Username is required"),
                     password: Yup.string()
                         .max(255)
                         .required("Password is required"),
@@ -61,14 +60,25 @@ const AuthLogin = () => {
                     values,
                     { setErrors, setStatus, setSubmitting }
                 ) => {
-                    try {
-                        setStatus({ success: false });
-                        setSubmitting(false);
-                    } catch (err) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
+                    axios
+                        .post("https://localhost:7151/account/Login", values, {
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                        .then(function (response) {
+                            setStatus({ submit: "Successfully log in" });
+                            setStatus({ success: true });
+                            setSubmitting(false);
+                            console.log(response.data);
+                        })
+                        .catch(function (error) {
+                            setErrors({
+                                submit: "Incorrect Username or Password.",
+                            });
+                            setStatus({ success: false });
+                            setSubmitting(false);
+                        });
                 }}
             >
                 {({
@@ -84,28 +94,28 @@ const AuthLogin = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="email-login">
-                                        Email Address
+                                    <InputLabel htmlFor="username-login">
+                                        Username
                                     </InputLabel>
                                     <OutlinedInput
-                                        id="email-login"
-                                        type="email"
-                                        value={values.email}
-                                        name="email"
+                                        id="username-login"
+                                        type="text"
+                                        value={values.username}
+                                        name="username"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Enter email address"
+                                        placeholder="Enter username"
                                         fullWidth
                                         error={Boolean(
-                                            touched.email && errors.email
+                                            touched.username && errors.username
                                         )}
                                     />
-                                    {touched.email && errors.email && (
+                                    {touched.username && errors.username && (
                                         <FormHelperText
                                             error
-                                            id="standard-weight-helper-text-email-login"
+                                            id="standard-weight-helper-text-username-login"
                                         >
-                                            {errors.email}
+                                            {errors.username}
                                         </FormHelperText>
                                     )}
                                 </Stack>
@@ -162,43 +172,6 @@ const AuthLogin = () => {
                                 </Stack>
                             </Grid>
 
-                            <Grid item xs={12} sx={{ mt: -1 }}>
-                                <Stack
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                    spacing={2}
-                                >
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={checked}
-                                                onChange={(event) =>
-                                                    setChecked(
-                                                        event.target.checked
-                                                    )
-                                                }
-                                                name="checked"
-                                                color="primary"
-                                                size="small"
-                                            />
-                                        }
-                                        label={
-                                            <Typography variant="h6">
-                                                Keep me sign in
-                                            </Typography>
-                                        }
-                                    />
-                                    <Link
-                                        variant="h6"
-                                        component={RouterLink}
-                                        to=""
-                                        color="text.primary"
-                                    >
-                                        Forgot Password?
-                                    </Link>
-                                </Stack>
-                            </Grid>
                             {errors.submit && (
                                 <Grid item xs={12}>
                                     <FormHelperText error>
