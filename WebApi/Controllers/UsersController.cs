@@ -25,20 +25,7 @@ namespace WebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("Admins")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult AdminEndpoint()
-        {
-            var currentUser = GetCurrentUser();
-            return Ok($"{currentUser.Username} ne!!, role: {currentUser.Role}");
-        }
-
-        [HttpGet("Public")]
-        public IActionResult Public()
-        {
-            var currentUser = GetCurrentUser();
-            return Ok(currentUser.Username);
-        }
+        
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDtoGet>>> GetAllUsers()
