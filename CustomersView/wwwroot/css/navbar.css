@@ -1,7 +1,7 @@
 ﻿.search-box {
     padding-top: 0px;
     position: relative;
-    width: 250px;   
+    width: 250px;
     height: 40px;
 }
 
@@ -38,6 +38,10 @@ li .dropdown:hover .dropdown-menu {
         animation-fill-mode: both;
         -webkit-animation-fill-mode: both;
     }
+}
+
+@media (max-width:767px) {
+
 }
 
 @keyframes slideIn {

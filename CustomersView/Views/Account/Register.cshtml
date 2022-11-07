@@ -1,0 +1,66 @@
+﻿@model WebApi.Dto.UserDtoPost
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Account/_LayoutAccount.cshtml";
+}
+<link rel="stylesheet" href="~/css/register.css">
+<div class="container border rounded bg-white pb-5">
+    <div class="row">
+        <div class="col px-4">
+            <form asp-action="Register">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label fw-bold">Username *</label>
+                    <input asp-for="Username" class="form-control form-control-lg" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label fw-bold">Password *</label>
+                    <input asp-for="Password" class="form-control form-control-lg" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label fw-bold">Email *</label>
+                    <input asp-for="Email" class="form-control form-control-lg" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label fw-bold">First name *</label>
+                    <input asp-for="FirstName" class="form-control form-control-lg" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label fw-bold">Last name *</label>
+                    <input asp-for="LastName" class="form-control form-control-lg" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label fw-bold">Address *</label>
+                    <input asp-for="Address" class="form-control form-control-lg" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label fw-bold">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control form-control-lg" value="" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group py-4">
+                    <input type="submit" value="Đăng ký"
+                        class="btn btn-blue fw-bold btn-lg form-control text-white border-0 py-3" />
+                </div>
+
+                <div>
+                    <a asp-action="Login" class="btn btn-blue fw-bold btn-lg form-control text-white border-0 py-3">Quay lại
+                        đăng
+                        nhập</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

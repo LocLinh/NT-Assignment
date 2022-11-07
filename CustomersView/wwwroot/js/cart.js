@@ -1,4 +1,5 @@
-﻿function handleCalculatePrice(index) {
+﻿var productFetch = fetch("https://localhost:7151/api/Products");
+function handleCalculatePrice(index) {
     var quantity = document.getElementById(`quantity${index}`).value;
     var price = document
         .getElementById(`price${index}`)
@@ -11,10 +12,9 @@
 function handleRemoveItem(id) {
     var cartItems = JSON.parse(sessionStorage.itemCount);
     delete cartItems[id];
-    console.log(cartItems);
     sessionStorage.itemCount = JSON.stringify(cartItems);
-    console.log(sessionStorage.itemCount);
     document.getElementById(`product-no${id}`).remove();
+    setItemCount();
 }
 
 function handleCalculateTotalPrice() {
@@ -22,8 +22,40 @@ function handleCalculateTotalPrice() {
     var totalPrice = cartItems.map;
 }
 
+function handleCountItems() {
+    var cartItems = JSON.parse(sessionStorage.itemCount);
+    return Object.keys(cartItems).length;
+}
+
+function setItemCount() {
+    Array.from(document.getElementsByClassName("item-count")).map(
+        (i) => (i.innerHTML = handleCountItems())
+    );
+    document.getElementById("cart-items-counter").innerHTML =
+        handleCountItems();
+}
+
+function handleCalculateTotalPrice() {
+    productFetch
+        .then((res) => res.json())
+        .then((products) => {
+            var cartItems = JSON.parse(sessionStorage.itemCount);
+            var cartProducts = products.filter((item) => {
+                return item.id in cartItems;
+            });
+            var a = cartProducts.reduce(
+                (prevProduct, currProduct) =>
+                    prevProduct.price * cartItems[prevProduct.id] +
+                    currProduct.price * cartItems[currProduct.id],
+                0
+            );
+            console.log(a);
+        });
+}
+
 const getCartItems = async () => {
     try {
+        setItemCount();
         var response = await fetch("https://localhost:7151/api/Products");
         var products = await response.json();
         var cartItems = JSON.parse(sessionStorage.itemCount);
@@ -36,7 +68,11 @@ const getCartItems = async () => {
                 <hr class="my-4">
                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                     <div class="col-md-2 col-lg-2 col-xl-2">
-                        <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg"
+                        <img src="${
+                            product.imagePath != ""
+                                ? product.imagePath
+                                : "https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg"
+                        }"
                             class="img-fluid rounded-3" alt="Cotton T-shirt">
                     </div>
                     <div class="col-md-3 col-lg-3 col-xl-3">
@@ -77,13 +113,11 @@ const getCartItems = async () => {
 
         container.innerHTML = "";
         item.map((i) => (container.innerHTML += i));
-        console.log(item);
         return products;
     } catch (error) {
         console.log(error);
         return null;
     }
 };
-
+handleCalculateTotalPrice();
 getCartItems();
-// getCartItems().then((e) => console.log(e));

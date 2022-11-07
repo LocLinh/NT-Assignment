@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using WebApi.Data;
+using WebApi.Dto;
 using WebApi.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,20 +16,32 @@ namespace WebApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        [HttpGet("Admins")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult AdminEndpoint()
+        private readonly WebApiDbContext _context;
+        public readonly IMapper _mapper;
+
+        public UsersController(WebApiDbContext context, IMapper mapper)
         {
-            var currentUser = GetCurrentUser();
-            return Ok($"{currentUser.Username} ne!!, role: {currentUser.Role}");
+            _context = context;
+            _mapper = mapper;
         }
 
-        [HttpGet("Public")]
-        public IActionResult Public()
+        
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDtoGet>>> GetAllUsers()
         {
-            return Ok("you are not ok");
+            return await _context.users.Select(user => _mapper.Map<UserDtoGet>(user)).ToListAsync();
         }
 
+        [HttpPost]
+        public async Task<ActionResult<UserDtoPost>> Register(UserDtoPost userDto)
+        {
+            Users user = _mapper.Map<Users>(userDto);
+            _context.users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(userDto);
+        }
         private Users GetCurrentUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

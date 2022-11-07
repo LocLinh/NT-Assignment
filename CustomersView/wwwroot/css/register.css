@@ -1,0 +1,27 @@
+body {
+    background-color: #eff3f4;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+}
+
+div.form-group label {
+    padding-top: 1.5em;
+    padding-bottom: 0.5em;
+    color: #217093;
+}
+
+div.form-group input {
+    border: solid 2px #217093;
+}
+
+div .btn-blue {
+    background-color: #4eb8dd;
+}
+
+div .btn-blue:hover {
+    background-color: #217093;
+}

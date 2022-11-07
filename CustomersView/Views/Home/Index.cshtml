@@ -1,45 +1,80 @@
-﻿@using System.Globalization
-@model IEnumerable<CustomersView.Models.Products>
+﻿
+@model IEnumerable<CustomersView.Dto.ProductDtoGet>
+
 @{
     ViewData["Title"] = "Trang chủ";
 }
 
 <link rel="stylesheet" href="~/css/productcard.css" asp-append-version="true" />
+
+<div class="container-fluid mb-5">
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://via.placeholder.com/1366x410.png" class="d-block w-100" alt="placeholder1366x410">
+            </div>
+            <div class="carousel-item">
+                <img src="https://via.placeholder.com/1366x410.png" class="d-block w-100" alt="placeholder1366x410">
+            </div>
+            <div class="carousel-item">
+                <img src="https://via.placeholder.com/1366x410.png" class="d-block w-100" alt="placeholder1366x410">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<h1 class="text-uppercase text-center">- Tất cả sản phẩm -</h1>
 <section id="product1" class="text-center">
     <div class="pro-container">
-    @if (Model != null)
-    {
-        @foreach (var p in Model)
+        @if (Model != null)
         {
-            <div class="pro" id="@Html.DisplayFor(modelItem => p.Id)">
-                <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" alt="" />
-                <div class="des">
-                    <span>@Html.DisplayFor(modelItem => p.Name)</span>
-                    @*<h5>@Html.DisplayFor(modelItem => p.Description)</h5>*@
-                    <div class="star">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div> 
-                    @{var newPrice = p.Price;
-                    var newerPrice = String.Format("{0:N0}", newPrice);}
-                    <h4>@newerPrice VNĐ</h4>
-                    <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.Id" class="stretched-link"></a>
+            @foreach (var p in Model)
+            {
+                <div class="pro" id="@Html.DisplayFor(modelItem => p.Id)">
+                    @if (string.IsNullOrEmpty(p.ImagePath)){
+                        <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" alt="placeholder image" />
+                    }
+                    else {
+                        <img src="@Html.DisplayFor(modelItem => p.ImagePath)" alt="placeholder image" />
+                    }
+                    <div class="des">
+                        <span>@Html.DisplayFor(modelItem => p.Name)</span>
+                        @*<h5>@Html.DisplayFor(modelItem => p.Description)</h5>*@
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        @{
+                            var newPrice = p.Price;
+                            var newerPrice = String.Format("{0:N0}", newPrice);
+                        }
+                        <h4>@newerPrice VNĐ</h4>
+                        <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.Id" class="stretched-link"></a>
+                    </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="row">
+                <h1>
+                    Server error!
+                </h1>
+                <p>
+                    Cannot get items from database
+                </p>
+                @Html.ValidationSummary()
             </div>
         }
-    }
-    else
-    {
-        <h1>
-            Server error!
-        </h1>
-        <p>
-            Cannot get items from database
-        </p>
-        @Html.ValidationSummary()
-    }
     </div>
 </section>

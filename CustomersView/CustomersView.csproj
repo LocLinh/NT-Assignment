@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\_LayoutAccount.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\login.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Client\" />
     <Folder Include="Views\Pages\" />
     <Folder Include="wwwroot\images\" />
@@ -15,7 +23,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Account\_LayoutAccount.cshtml" />
   </ItemGroup>
 
 </Project>

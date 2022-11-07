@@ -1,9 +1,14 @@
-﻿using CustomersView.Models;
+﻿using CustomersView.Dto;
+using CustomersView.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace CustomersView.Controllers
@@ -21,7 +26,7 @@ namespace CustomersView.Controllers
         // Get all product
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Products> products = null;
+            IEnumerable<ProductDtoGet> products = null;
 
             using (var client = new HttpClient())
             {
@@ -34,7 +39,7 @@ namespace CustomersView.Controllers
                 if (getData.IsSuccessStatusCode)
                 {
                     string results = getData.Content.ReadAsStringAsync().Result;
-                    products = JsonConvert.DeserializeObject<IEnumerable<Products>>(results);
+                    products = JsonConvert.DeserializeObject<IEnumerable<ProductDtoGet>>(results);
 
                 }
                 string qParams = Request.Query["Category"];
@@ -43,6 +48,7 @@ namespace CustomersView.Controllers
                     ViewBag.value = qParams;
                     products = products.Where(p => p.CategoryId.ToString() == qParams);
                 }
+                
             }
             return View(products);
         }
@@ -50,6 +56,16 @@ namespace CustomersView.Controllers
         // GET: HomeController1/Details/5
         public async Task<IActionResult> ProductDetail(int Id)
         {
+            var token = Request.Cookies["JwtToken"];
+            var userName = "";
+            if (token != null)
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var userInfo = tokenHandler.ReadJwtToken(token);
+                userName = userInfo.Claims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.userName = userName;
+            }
+
             Products product = new Products();
 
             using (var client = new HttpClient())
@@ -58,19 +74,51 @@ namespace CustomersView.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("Application/Json"));
 
-                HttpResponseMessage getData = await client.GetAsync($"Products/{Id}");
+                HttpResponseMessage getProductData = await client.GetAsync($"Products/{Id}");
 
-                if (getData.IsSuccessStatusCode)
+                if (getProductData.IsSuccessStatusCode)
                 {
-                    string result = getData.Content.ReadAsStringAsync().Result;
-                    product = JsonConvert.DeserializeObject<Products>(result);
-
+                    string resultForProduct = getProductData.Content.ReadAsStringAsync().Result;
+                    product = JsonConvert.DeserializeObject<Products>(resultForProduct);
+                    ViewData["product"] = product;
                 }
+
+                HttpResponseMessage getCommentData = await client.GetAsync($"Comments/GetAllCommentsByProduct/{Id}");
+
+                if (getCommentData.IsSuccessStatusCode)
+                {
+                    string resultForComment = getCommentData.Content.ReadAsStringAsync().Result;
+                    IEnumerable<Comments> comments = JsonConvert.DeserializeObject<IEnumerable<Comments>>(resultForComment);
+                    ViewData["comments"] = comments;
+                }
+
             }
-            return View(product);
+
+            return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public async Task<IActionResult> PostComment(CommentDtoPost comment)
+        {
+            if (comment == null)
+            {
+                return View("Error");
+            }
+
+            var commentData = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+
+                var response = await client.PostAsync("Comments", commentData);
+
+            }
+
+            return RedirectToAction("ProductDetail", new { Id = comment.ProductId });
+        }
+
+            public IActionResult Privacy()
         {
             return View();
         }

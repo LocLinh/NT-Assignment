@@ -5,8 +5,8 @@
 }
 /*anh phai duoi 400px*/
 #product1 .pro {
-    width: 23%;
-    height: 450px;
+    width: 22%;
+    height: 500px;
     min-width: 250px;
     padding: 10px 12px;
     border: 1px solid #cce7d0;
@@ -29,4 +29,11 @@
 
 .pro {
     transform: rotate(0);
+}
+
+@media (max-width:767px) {
+
+    #product1 .pro {
+        height: 380px;
+    }
 }

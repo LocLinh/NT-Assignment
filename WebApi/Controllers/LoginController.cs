@@ -8,6 +8,7 @@ using NuGet.Protocol;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApi.Data;
 using WebApi.Model;
 
 namespace WebApi.Controllers
@@ -17,10 +18,12 @@ namespace WebApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
+        private readonly WebApiDbContext _context;
 
-        public LoginController(IConfiguration config)
+        public LoginController(IConfiguration config, WebApiDbContext context)
         {
             _config = config;
+            _context = context;
         }
 
         [AllowAnonymous]
@@ -66,9 +69,9 @@ namespace WebApi.Controllers
 
         private Users Authenticate(UserLogin userlogin)
         {
-            var currentUser = UserConstants.Users.FirstOrDefault(o =>
-                                                            o.Username.ToLower() == userlogin.Username.ToLower() 
+            var currentUser = _context.users.FirstOrDefault(o => o.Username.ToLower() == userlogin.Username.ToLower()
                                                             && o.Password == userlogin.Password);
+
             if (currentUser != null)
             {
                 return currentUser;

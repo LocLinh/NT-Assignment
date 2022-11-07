@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
 using WebApi.Dto;
 using WebApi.Model;
+using WebApi.Repository;
 
 namespace WebApi.Controllers
 {
@@ -13,57 +14,71 @@ namespace WebApi.Controllers
     {
         private readonly WebApiDbContext _context;
         public readonly IMapper _mapper;
+        public readonly IProductRepository _productRepository;
+        public readonly ICategoryRepository _categoryRepository;
 
-        public ProductsController(WebApiDbContext context, IMapper mapper)
+        public ProductsController(WebApiDbContext context, IMapper mapper, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _context = context;
             _mapper = mapper;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Products>>> GetProductsModel()
+        public async Task<ActionResult<IEnumerable<ProductDtoGet>>> GetProductsModel()
         {
-            //var productList = await _context.products.Include(product => product.Categories).ToListAsync();
-            //var productsPublic = productList.Select(product => _mapper.Map<ProductDtoGet>(product));
-            return await _context.products.Include(product => product.Categories).ToListAsync();
-            //return Ok(productsPublic);
+            IEnumerable<Products> products = await _productRepository.GetProducts();
+            return Ok(_mapper.Map<IEnumerable<ProductDtoGet>>(products));
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Products>> GetProductsModel(int id)
         {
-            var productsModel = await _context.products.Include(product => product.Categories).FirstOrDefaultAsync(product => product.Id == id);
-            if (productsModel == null)
+            var product = await _productRepository.GetOneProducts(id);
+            if (product == null)
             {
-                return NotFound();
+                return NoContent();
             }
-
-            return productsModel;
+            return Ok(product);
         }
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProductsModel(int id,Products productsModel)
+        public async Task<IActionResult> PutProductsModel(int id, ProductDtoPost productsDto)
         {
-            if (id != productsModel.Id)
+            var category = await _categoryRepository.GetOneCategory(id);
+            if (category == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(productsModel).State = EntityState.Modified;
+            var newProduct = new Products
+            {
+                Id = id,
+                Name = productsDto.Name,
+                Description = productsDto.Description,
+                CategoryId = productsDto.CategoryId,
+                Price = productsDto.Price,
+                DiscountPercent = productsDto.DiscountPercent,
+                ImagePath = productsDto.ImagePath,
+                Categories = category
+            };
+
+            _productRepository.PutProducts(newProduct);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _productRepository.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!ProductsModelExists(id))
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
                 else
                 {
@@ -71,34 +86,50 @@ namespace WebApi.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Products>> PostProductsModel(Products productsModel)
+        public async Task<ActionResult<ProductDtoPost>> PostProductsModel(ProductDtoPost productsModel)
         {
-            _context.products.Add(productsModel);
-            await _context.SaveChangesAsync();
+            var productcategory = await _categoryRepository.GetOneCategory(productsModel.CategoryId);
+            if (productcategory == null)
+            {
+                return BadRequest("Cửa hàng chúng tôi hiện không nhận loại sản phẩm bạn vừa thêm.");
+            }
+            Products product = new Products
+            {
+                Name = productsModel.Name,
+                Description = productsModel.Description,
+                CategoryId = productsModel.CategoryId,
+                Price = productsModel.Price,
+                DiscountPercent = productsModel.DiscountPercent,
+                ImagePath = productsModel.ImagePath,
+                Categories = productcategory,
+            };
 
-            return CreatedAtAction("GetProductsModel", new { id = productsModel.Id }, productsModel);
+            await _productRepository.AddOneProducts(product);
+            await _productRepository.Save();
+
+            return CreatedAtAction("GetProductsModel", new { id = product.Id }, product);
+
         }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductsModel(int id)
         {
-            var productsModel = await _context.products.FindAsync(id);
-            if (productsModel == null)
+            Products product = await _productRepository.GetOneProducts(id);
+            if (product == null)
             {
-                return NotFound();
+                return NoContent();
             }
+            _productRepository.DeleteProducts(product);
+            await _productRepository.Save();
 
-            _context.products.Remove(productsModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok("Delete successfully.");
         }
 
         private bool ProductsModelExists(int id)
