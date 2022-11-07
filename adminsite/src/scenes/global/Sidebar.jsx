@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Sidebar as ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import LoginIcon from "@mui/icons-material/Login";
+import Cookies from "universal-cookie";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -53,7 +55,8 @@ const Sidebar = () => {
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
-
+    const cookies = new Cookies();
+    const navigate = useNavigate();
     return (
         <Box
             sx={{
@@ -152,6 +155,16 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+                        <MenuItem
+                            icon={<PowerSettingsNewOutlinedIcon />}
+                            onClick={() => {
+                                cookies.remove("Token");
+                                navigate("/login");
+                            }}
+                            style={{ color: colors.grey[300] }}
+                        >
+                            <Typography>Logout</Typography>
+                        </MenuItem>
                     </Box>
                 </Menu>
             </ProSidebar>

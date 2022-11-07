@@ -1,5 +1,7 @@
-import React from "react";
-
+import React, { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 // material-ui
 import {
     Button,
@@ -25,7 +27,11 @@ import jwt_decode from "jwt-decode";
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const { setAuth } = useAuth();
+    const navigate = useNavigate();
+    const cookies = new Cookies();
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -65,12 +71,28 @@ const AuthLogin = () => {
                             setSubmitting(false);
                             // console.log(response.data);
                             var decode_data = jwt_decode(response.data);
-                            if (
+                            var role =
                                 decode_data[
                                     "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-                                ] === "Admin"
-                            ) {
+                                ];
+                            var username =
+                                decode_data[
+                                    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                                ];
+
+                            if (role === "Admin") {
                                 console.log("login thanh cong");
+                                setAuth({ role, username });
+                                cookies.set("Token", response.data, {
+                                    path: "/",
+                                });
+                                navigate("/");
+                            } else {
+                                setErrors({
+                                    submit: "This user is not an admin.",
+                                });
+                                setStatus({ success: false });
+                                setSubmitting(false);
                             }
                         })
                         .catch(function (error) {

@@ -6,7 +6,7 @@ function ImageCropper({ image, onCropDone, onCropCancel }) {
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedArea, setCroppedArea] = useState(null);
-    const [aspectRatio, setAspectRatio] = useState(4 / 5);
+    const aspectRatio = 4 / 5;
 
     const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
         setCroppedArea(croppedAreaPixels);

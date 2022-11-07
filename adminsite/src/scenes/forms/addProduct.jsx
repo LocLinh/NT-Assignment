@@ -11,7 +11,6 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { tokens } from "../../theme";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { storage } from "../../firebaseConfig";
@@ -118,6 +117,8 @@ const AddProductForm = () => {
                     case "running":
                         console.log("Upload is running");
                         break;
+                    default:
+                        console.log("Error while uploading");
                 }
             },
             (error) => {
@@ -149,7 +150,6 @@ const AddProductForm = () => {
                     handleBlur,
                     handleChange,
                     handleSubmit,
-                    setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>
                         <Box
@@ -336,6 +336,7 @@ const AddProductForm = () => {
                                 src={imgAfterCrop}
                                 className="cropped-img"
                                 style={{ width: "100%" }}
+                                alt="after cropped"
                             />
                         </div>
                     </div>
