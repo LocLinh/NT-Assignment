@@ -38,8 +38,12 @@
             @foreach (var p in Model)
             {
                 <div class="pro" id="@Html.DisplayFor(modelItem => p.Id)">
-                    <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg"
-                alt="" />
+                    @if (string.IsNullOrEmpty(p.ImagePath)){
+                        <img src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" alt="placeholder image" />
+                    }
+                    else {
+                        <img src="@Html.DisplayFor(modelItem => p.ImagePath)" alt="placeholder image" />
+                    }
                     <div class="des">
                         <span>@Html.DisplayFor(modelItem => p.Name)</span>
                         @*<h5>@Html.DisplayFor(modelItem => p.Description)</h5>*@

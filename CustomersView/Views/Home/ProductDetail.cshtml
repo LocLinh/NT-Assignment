@@ -13,8 +13,12 @@
 			<div class="preview col-md-6">
 				<div class="preview-pic tab-content">
 					<div class="" id="">
+						@if (string.IsNullOrEmpty(product.ImagePath)){
 						<img
-							src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" />
+							src="https://www.citizenwatch.com/dw/image/v2/BBQB_PRD/on/demandware.static/-/Sites-citizen_US-Library/default/dw474767b5/homepage-images/hero-images/home-half-hero-mickey-baseball.jpg" alt="placeholder image" />
+						} else {	
+						<img src="@product.ImagePath"  />		
+						}
 					</div>
 				</div>
 			</div>
