@@ -1,11 +1,11 @@
 import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
-import useAuth from "../hooks/useAuth";
+// import useAuth from "../hooks/useAuth";
 import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
 
 const ProtectedRoute = () => {
-    const { auth } = useAuth();
+    // const { auth } = useAuth();
     const location = useLocation();
     const cookies = new Cookies();
     const token = cookies.get("Token");

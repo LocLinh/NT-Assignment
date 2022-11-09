@@ -50,7 +50,7 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductsModel(int id, ProductDtoPost productsDto)
         {
-            var category = await _categoryRepository.GetOneCategory(id);
+            var category = await _categoryRepository.GetOneCategory(productsDto.CategoryId);
             if (category == null)
             {
                 return BadRequest();

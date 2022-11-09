@@ -44,12 +44,15 @@ const Products = () => {
     const [pageSize, setPageSise] = useState(10);
     const [rowModesModel, setRowModesModel] = useState({});
     const [open, setOpen] = useState(0);
+
     const handleOpen = (id) => {
         setOpen(id);
     };
+
     const handleClose = () => {
         setOpen(0);
     };
+
     const handleRowEditStart = (params, event) => {
         event.defaultMuiPrevented = true;
     };
@@ -82,7 +85,7 @@ const Products = () => {
     const handleCancelClick = (id) => () => {
         setRowModesModel({
             ...rowModesModel,
-            [id]: { mode: GridRowModes.View, ignoreModifications: true },
+            [id]: { mode: "view", ignoreModifications: true },
         });
 
         const editedRow = products.find((row) => row.id === id);
@@ -100,8 +103,9 @@ const Products = () => {
             var newCategory = categories.filter(
                 (o) => o.name === newRow.categoryName
             );
+            // console.log(newRow);
             newRow.categoryId = newCategory[0].id;
-            handlePutProduct(newRow.id, JSON.stringify(newRow));
+            handlePutProduct(newRow.id, newRow);
         }
         return updatedRow;
     };

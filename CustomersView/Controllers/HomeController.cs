@@ -104,13 +104,14 @@ namespace CustomersView.Controllers
             {
                 return View("Error");
             }
+            var token = Request.Cookies["JwtToken"];
 
             var commentData = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseUrl);
-
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await client.PostAsync("Comments", commentData);
 
             }

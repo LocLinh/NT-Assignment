@@ -8,6 +8,7 @@ import MainLayout from "./layout/MainLayout";
 import Dashboard from "./scenes/dashboard";
 import Products from "./scenes/products";
 import AddProductForm from "./scenes/forms/addProduct";
+import AddCategoryForm from "./scenes/forms/addCategory";
 import Login from "./scenes/login/Login";
 import Register from "./scenes/login/Register";
 import Users from "./scenes/users";
@@ -30,6 +31,10 @@ function App() {
                             <Route
                                 path="manage-products/add"
                                 element={<AddProductForm />}
+                            />
+                            <Route
+                                path="manage-categories/add"
+                                element={<AddCategoryForm />}
                             />
                             <Route path="Users" element={<Users />} />
                             <Route
