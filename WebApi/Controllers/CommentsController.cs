@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using WebApi.Data;
 using WebApi.Dto;
 using WebApi.Model;
@@ -63,10 +66,18 @@ namespace WebApi.Controllers
             return comment;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostComment(CommentDtoPost commentDto)
         {
-            var user = await _context.users.FirstOrDefaultAsync(u => u.Username == commentDto.Username);
+            // get user name from header bearer token
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var userInfo = tokenHandler.ReadJwtToken(token);
+            var userName = userInfo.Claims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value;
+            
+            // find user and product in database
+            var user = await _context.users.FirstOrDefaultAsync(u => u.Username == userName);
             var product = await _context.products.FirstOrDefaultAsync(p => p.Id == commentDto.ProductId);
 
             if (user != null && product != null)

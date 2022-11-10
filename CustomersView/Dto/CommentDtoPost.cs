@@ -8,6 +8,5 @@ namespace CustomersView.Dto
         [Range(0, 5)]
         public int Rate { get; set; } = 5;
         public int ProductId { get; set; }
-        public string Username { get; set; }
     }
 }

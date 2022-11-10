@@ -79,7 +79,6 @@
 					<hr />
 
 					<form asp-action="PostComment" method="post">
-						<input value="@ViewBag.username" asp-for="Username" hidden>
 						<input value="@product.Id" asp-for="ProductId" hidden>
 						<input value="5" asp-for="Rate" id="form-rate" hidden>
 						<div class="mb-3">

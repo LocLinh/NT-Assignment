@@ -25,11 +25,10 @@ namespace WebApi.Controllers
             _mapper = mapper;
         }
 
-        
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDtoGet>>> GetAllUsers()
         {
+            var token = Request.Headers.Authorization.ToString();
             return await _context.users.Select(user => _mapper.Map<UserDtoGet>(user)).ToListAsync();
         }
 

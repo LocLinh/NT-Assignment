@@ -3,6 +3,7 @@ using CustomersView.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NuGet.Common;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
@@ -30,10 +31,11 @@ namespace CustomersView.Controllers
 
             using (var client = new HttpClient())
             {
+                //var token = Request.Cookies["JwtToken"];
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("Application/Json"));
-
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 HttpResponseMessage getData = await client.GetAsync("Products");
 
                 if (getData.IsSuccessStatusCode)
@@ -73,7 +75,6 @@ namespace CustomersView.Controllers
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("Application/Json"));
-
                 HttpResponseMessage getProductData = await client.GetAsync($"Products/{Id}");
 
                 if (getProductData.IsSuccessStatusCode)
@@ -113,7 +114,6 @@ namespace CustomersView.Controllers
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await client.PostAsync("Comments", commentData);
-
             }
 
             return RedirectToAction("ProductDetail", new { Id = comment.ProductId });

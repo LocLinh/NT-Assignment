@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
+import Cookies from "universal-cookie";
 
 const Users = () => {
     const theme = useTheme();
@@ -11,8 +12,16 @@ const Users = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+        const cookies = new Cookies();
+        const token = cookies.get("Token");
+
         axios
-            .get("https://localhost:7151/account/Users")
+            .get("https://localhost:7151/account/Users", {
+                header: {
+                    Authorization: `Bearer ${token}`,
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
             .then((res) => setUsers(res.data));
     }, []);
 

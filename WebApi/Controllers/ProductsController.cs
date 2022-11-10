@@ -49,7 +49,7 @@ namespace WebApi.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductsModel(int id, ProductDtoPost productsDto)
-        {
+          {
             var category = await _categoryRepository.GetOneCategory(productsDto.CategoryId);
             if (category == null)
             {
