@@ -9,10 +9,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 const handleDeleteProduct = (id) => {
+    const token = cookies.get("Token");
     axios
-        .delete(`https://localhost:7151/api/Products/${id}`)
+        .delete(`https://localhost:7151/api/Products/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
+            },
+        })
         .then(function (response) {
             console.log(response);
         })
@@ -22,10 +29,13 @@ const handleDeleteProduct = (id) => {
 };
 
 const handlePutProduct = (id, product) => {
+    const token = cookies.get("Token");
     axios
         .put(`https://localhost:7151/api/Products/${id}`, product, {
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
             },
         })
         .then(function (response) {

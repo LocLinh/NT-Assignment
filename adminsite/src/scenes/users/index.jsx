@@ -17,7 +17,7 @@ const Users = () => {
 
         axios
             .get("https://localhost:7151/account/Users", {
-                header: {
+                headers: {
                     Authorization: `Bearer ${token}`,
                     "Access-Control-Allow-Origin": "*",
                 },

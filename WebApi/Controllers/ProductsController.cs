@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
@@ -45,8 +46,10 @@ namespace WebApi.Controllers
             return Ok(product);
         }
 
+
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductsModel(int id, ProductDtoPost productsDto)
           {
@@ -91,6 +94,7 @@ namespace WebApi.Controllers
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductDtoPost>> PostProductsModel(ProductDtoPost productsModel)
         {
@@ -117,6 +121,7 @@ namespace WebApi.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductsModel(int id)

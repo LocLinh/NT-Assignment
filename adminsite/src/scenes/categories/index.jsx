@@ -4,15 +4,23 @@ import { Box, useTheme, Button, Fab, Modal } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+const cookies = new Cookies();
 
 const handleDeleteCategory = (id) => {
+    const token = cookies.get("Token");
     axios
-        .delete(`https://localhost:7151/api/ProductCategoriesModels/${id}`)
+        .delete(`https://localhost:7151/api/ProductCategoriesModels/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
+            },
+        })
         .then(function (response) {
             console.log(response);
         })
@@ -22,6 +30,7 @@ const handleDeleteCategory = (id) => {
 };
 
 const handleUpdateCategory = (id, category) => {
+    const token = cookies.get("Token");
     axios
         .put(
             `https://localhost:7151/api/ProductCategoriesModels/${id}`,
@@ -29,6 +38,8 @@ const handleUpdateCategory = (id, category) => {
             {
                 headers: {
                     "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    Authorization: `Bearer ${token}`,
                 },
             }
         )
@@ -47,6 +58,7 @@ const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
     const [open, setOpen] = useState(0);
+    const token = cookies.get("Token");
 
     const handleOpen = (id) => {
         setOpen(id);
@@ -111,9 +123,14 @@ const Categories = () => {
 
     useEffect(() => {
         axios
-            .get("https://localhost:7151/api/ProductCategoriesModels")
+            .get("https://localhost:7151/api/ProductCategoriesModels", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
             .then((res) => setCategories(res.data));
-    }, []);
+    }, [token]);
 
     const columns = [
         { field: "id", headerName: "ID", flex: 1 },

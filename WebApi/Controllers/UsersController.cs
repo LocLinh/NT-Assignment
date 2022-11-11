@@ -24,11 +24,11 @@ namespace WebApi.Controllers
             _context = context;
             _mapper = mapper;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDtoGet>>> GetAllUsers()
         {
-            var token = Request.Headers.Authorization.ToString();
+            //var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
             return await _context.users.Select(user => _mapper.Map<UserDtoGet>(user)).ToListAsync();
         }
 

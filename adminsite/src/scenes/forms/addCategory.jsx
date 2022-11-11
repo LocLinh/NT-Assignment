@@ -2,12 +2,17 @@ import { Box, Button, TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const handleFormSubmit = (values) => {
+    const token = cookies.get("Token");
     axios
         .post("https://localhost:7151/api/ProductCategoriesModels", values, {
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
             },
         })
         .then(function (response) {

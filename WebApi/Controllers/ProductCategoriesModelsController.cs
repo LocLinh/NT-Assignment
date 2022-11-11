@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,7 @@ namespace WebApi.Controllers
 
         // PUT: api/ProductCategoriesModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductCategoriesModel(int id, ProductCategories productCategoriesModel)
         {
@@ -78,6 +80,7 @@ namespace WebApi.Controllers
 
         // POST: api/ProductCategoriesModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductCategories>> PostProductCategoriesModel(ProductCategories productCategoriesModel)
         {
@@ -88,6 +91,7 @@ namespace WebApi.Controllers
         }
 
         // DELETE: api/ProductCategoriesModels/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductCategoriesModel(int id)
         {

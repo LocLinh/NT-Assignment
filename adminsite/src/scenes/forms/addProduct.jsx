@@ -17,15 +17,17 @@ import { storage } from "../../firebaseConfig";
 import FileInput from "../../components/imageInput";
 import ImageCropper from "../../utils/imageCropper";
 import { dataURLtoFile } from "../../utils/cropImage";
+import Cookies from "universal-cookie";
 
 const AddProductForm = () => {
-    const [categories, setCategories] = useState([]);
     const theme = useTheme();
+    const cookies = new Cookies();
+    const [categories, setCategories] = useState([]);
     const [imageUpload, setImageUpload] = useState(null);
     const [imgAfterCrop, setImgAfterCrop] = useState(null);
     const [currentPage, setCurrentPage] = useState("choose-img");
     const [imageUrl, setImageUrl] = useState("");
-
+    const token = cookies.get("Token");
     // get category data for input
     useEffect(() => {
         axios
@@ -34,11 +36,14 @@ const AddProductForm = () => {
     }, []);
 
     const handleFormSubmit = (values) => {
+        // console.log(token);
         values.imagePath = imageUrl;
         axios
             .post("https://localhost:7151/api/Products", values, {
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                    "Access-Control-Allow-Origin": "*",
                 },
             })
             .then(function (response) {
