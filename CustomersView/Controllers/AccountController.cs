@@ -34,11 +34,11 @@ namespace CustomersView.Controllers
 				client.BaseAddress = new Uri(baseUrl);
 				
 				var response = await client.PostAsync("Login", userData);
-
-				var token = await response.Content.ReadAsStringAsync();
-
-				SetJWTCookie(token);
-
+				if (response.IsSuccessStatusCode)
+				{
+					var token = await response.Content.ReadAsStringAsync();
+					SetJWTCookie(token);
+				}
 			}
 
 			return RedirectToAction("Index", "Home");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -67,12 +68,23 @@ namespace WebApi.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private Users Authenticate(UserLogin userlogin)
+        private Users? Authenticate(UserLogin userlogin)
         {
-            var currentUser = _context.users.FirstOrDefault(o => o.Username.ToLower() == userlogin.Username.ToLower()
-                                                            && o.Password == userlogin.Password);
+            var currentUser = _context.users.FirstOrDefault(o => o.Username.ToLower() == userlogin.Username.ToLower());
+            if (currentUser == null)
+            {
+                return null;
+            }
 
-            if (currentUser != null)
+            string loginhashpassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: userlogin.Password,
+                salt: Encoding.ASCII.GetBytes(currentUser.Salt),
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 1000,
+                numBytesRequested: 256 / 8));
+
+
+            if (currentUser.HashPassword == loginhashpassword)
             {
                 return currentUser;
             }

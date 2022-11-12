@@ -13,8 +13,8 @@ namespace WebApi.Model
         [StringLength(50, ErrorMessage = "Username is too long.")]
         [RegularExpression(@"^[a-zA-Z][a-zA-Z0-9_]{5,49}$")]
         public string Username { get; set; }
-        [MinLength(8)]
-        public string Password { get; set; }
+        public string HashPassword { get; set; }
+        public string Salt { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
         public string FirstName { get; set; }

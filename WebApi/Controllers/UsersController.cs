@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using WebApi.Data;
 using WebApi.Dto;
 using WebApi.Model;
@@ -35,7 +38,42 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDtoPost>> Register(UserDtoPost userDto)
         {
-            Users user = _mapper.Map<Users>(userDto);
+            var isExistUser = await _context.users.AnyAsync(u => u.Username == userDto.Username);
+            if (isExistUser)
+            {
+                return BadRequest("User already exist");
+            }
+
+            byte[] initsalt = new byte[128 / 8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetNonZeroBytes(initsalt);
+            }
+            string initSaltStr = Encoding.ASCII.GetString(initsalt);
+
+
+            byte[] salt = Encoding.ASCII.GetBytes(initSaltStr);
+            string saltStr = Encoding.ASCII.GetString(salt);
+
+            string hashPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: userDto.Password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 1000,
+                numBytesRequested: 256 / 8));
+
+            Users user = new Users
+            {
+                Username = userDto.Username,
+                HashPassword = hashPassword,
+                Email = userDto.Email,
+                Address = userDto.Address,
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
+                PhoneNumber = userDto.PhoneNumber,
+                Role = "Customer",
+                Salt = saltStr
+            };
             _context.users.Add(user);
             await _context.SaveChangesAsync();
 
