@@ -15,5 +15,7 @@ namespace WebApi.Dto
         [Range(0, 100, ErrorMessage = "Please enter a value between 0 and 100")]
         public float DiscountPercent { get; set; } = 0;
         public string ImagePath { get; set; } = string.Empty;
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

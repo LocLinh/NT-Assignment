@@ -15,5 +15,7 @@ namespace WebApi.Dto
         public int Price { get; set; }
         public float DiscountPercent { get; set; }
         public string ImagePath { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

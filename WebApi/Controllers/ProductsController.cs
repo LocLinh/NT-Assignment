@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
 using WebApi.Dto;
+using WebApi.Interface;
 using WebApi.Model;
-using WebApi.Repository;
 
 namespace WebApi.Controllers
 {
@@ -68,7 +68,9 @@ namespace WebApi.Controllers
                 Price = productsDto.Price,
                 DiscountPercent = productsDto.DiscountPercent,
                 ImagePath = productsDto.ImagePath,
-                Categories = category
+                Categories = category,
+                CreatedDate = productsDto.CreatedDate,
+                UpdatedDate = DateTime.Now
             };
 
             _productRepository.PutProducts(newProduct);
@@ -92,8 +94,6 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        // POST: api/Products
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductDtoPost>> PostProductsModel(ProductDtoPost productsModel)
@@ -112,6 +112,8 @@ namespace WebApi.Controllers
                 DiscountPercent = productsModel.DiscountPercent,
                 ImagePath = productsModel.ImagePath,
                 Categories = productcategory,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
             };
 
             await _productRepository.AddOneProducts(product);

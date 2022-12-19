@@ -3,6 +3,7 @@ import { DataGrid, GridRowModes } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FormatDateddMMyyyy } from "../../utils/dateTimeFormat";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -44,6 +45,14 @@ const handlePutProduct = (id, product) => {
         .catch(function (error) {
             console.log(error);
         });
+};
+
+const FormatCreatedDate = (params) => {
+    return FormatDateddMMyyyy(params.row.createdDate);
+};
+
+const FormatUpdatedDate = (params) => {
+    return FormatDateddMMyyyy(params.row.updatedDate);
 };
 
 const Products = () => {
@@ -105,7 +114,11 @@ const Products = () => {
     };
 
     const processRowUpdate = (newRow, oldRow) => {
-        const updatedRow = { ...newRow, isNew: false };
+        var updatedRow = {
+            ...newRow,
+            isNew: false,
+        };
+        updatedRow.updatedDate = new Date().toString();
         if (JSON.stringify(newRow) !== JSON.stringify(oldRow)) {
             setProducts(
                 products.map((row) => (row.id === newRow.id ? updatedRow : row))
@@ -155,7 +168,7 @@ const Products = () => {
         {
             field: "price",
             headerName: "Price",
-            width: 120,
+            width: 100,
             type: "number",
             editable: true,
         },
@@ -166,6 +179,20 @@ const Products = () => {
             editable: true,
         },
         { field: "imagePath", headerName: "Image", width: 150, editable: true },
+        {
+            field: "createdDate",
+            headerName: "Created At",
+            width: 80,
+            editable: false,
+            valueGetter: FormatCreatedDate,
+        },
+        {
+            field: "updatedDate",
+            headerName: "Last Updated",
+            width: 80,
+            editable: false,
+            valueGetter: FormatUpdatedDate,
+        },
         {
             field: "actions",
             headerName: "Actions",

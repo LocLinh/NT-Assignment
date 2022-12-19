@@ -3,6 +3,7 @@
 	var token = Context.Request.Cookies["JwtToken"];
 	Products product = ViewData["product"] as Products;
 	IEnumerable<Comments> comments = ViewData["comments"] as IEnumerable<Comments>;
+	CommentRatingDto ratingSummary = ViewData["ratingSummary"] as CommentRatingDto;
 	ViewData["Title"] = "product detail";
 }
 
@@ -26,13 +27,23 @@
 				<h3 class="product-title">@product.Name</h3>
 				<div class="rating">
 					<div class="stars">
-						<span class="fa fa-star checked"></span>
+						@for (var i = 0; i < 5; i++)
+						{
+							if (ratingSummary.AvgRating >= i + 1)
+							{
+								<span class="fa fa-star checked"></span>
+							}else
+							{
+								<span class="fa fa-star"></span>
+							}
+						}
+						@*<span class="fa fa-star checked"></span>
 						<span class="fa fa-star checked"></span>
 						<span class="fa fa-star checked"></span>
 						<span class="fa fa-star"></span>
-						<span class="fa fa-star"></span>
+						<span class="fa fa-star"></span>*@
 					</div>
-					<span class="review-no">41 reviews</span>
+					<span class="review-no">@ratingSummary.ReviewCount reviews</span>
 				</div>
 				<p class="product-description">@product.Description</p>
 				<h4 class="price"><span>@String.Format("{0:N0}", product.Price) VNĐ</span></h4>

@@ -46,14 +46,6 @@
                     }
                     <div class="des">
                         <span>@Html.DisplayFor(modelItem => p.Name)</span>
-                        @*<h5>@Html.DisplayFor(modelItem => p.Description)</h5>*@
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
                         @{
                             var newPrice = p.Price;
                             var newerPrice = String.Format("{0:N0}", newPrice);

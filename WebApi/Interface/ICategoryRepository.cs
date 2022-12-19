@@ -1,6 +1,6 @@
 ﻿using WebApi.Model;
 
-namespace WebApi.Repository
+namespace WebApi.Interface
 {
     public interface ICategoryRepository
     {

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Data;
 using WebApi.Model;
+using WebApi.Interface;
 
 namespace WebApi.Repository
 {

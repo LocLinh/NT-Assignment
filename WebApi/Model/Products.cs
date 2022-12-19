@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Model
@@ -16,6 +17,8 @@ namespace WebApi.Model
         [Range(0, 100, ErrorMessage = "Please enter a value between 0 and 100")]
         public float DiscountPercent { get; set; } = 0;
         public string ImagePath { get; set; } = string.Empty;
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public ProductCategories Categories { get; set; }
     }
 }

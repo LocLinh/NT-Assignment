@@ -75,8 +75,8 @@ namespace CustomersView.Controllers
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("Application/Json"));
-                HttpResponseMessage getProductData = await client.GetAsync($"Products/{Id}");
 
+                HttpResponseMessage getProductData = await client.GetAsync($"Products/{Id}");
                 if (getProductData.IsSuccessStatusCode)
                 {
                     string resultForProduct = getProductData.Content.ReadAsStringAsync().Result;
@@ -85,7 +85,6 @@ namespace CustomersView.Controllers
                 }
 
                 HttpResponseMessage getCommentData = await client.GetAsync($"Comments/GetAllCommentsByProduct/{Id}");
-
                 if (getCommentData.IsSuccessStatusCode)
                 {
                     string resultForComment = getCommentData.Content.ReadAsStringAsync().Result;
@@ -93,9 +92,16 @@ namespace CustomersView.Controllers
                     ViewData["comments"] = comments;
                 }
 
-            }
+                HttpResponseMessage getRatingSummaryData = await client.GetAsync($"Comments/GetReviewSummaryByProduct/{Id}");
+                if (getRatingSummaryData.IsSuccessStatusCode)
+                {
+                    string resultForRatingSummary = getRatingSummaryData.Content.ReadAsStringAsync().Result;
+                    CommentRatingDto ratingSummary = JsonConvert.DeserializeObject<CommentRatingDto>(resultForRatingSummary);
+                    ViewData["ratingSummary"] = ratingSummary;
+                }
 
-            return View();
+                return View();
+            }
         }
 
         [HttpPost]
@@ -119,7 +125,7 @@ namespace CustomersView.Controllers
             return RedirectToAction("ProductDetail", new { Id = comment.ProductId });
         }
 
-            public IActionResult Privacy()
+        public IActionResult Privacy()
         {
             return View();
         }

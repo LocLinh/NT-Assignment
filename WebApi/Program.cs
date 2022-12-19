@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApi.Data;
 using WebApi.Repository;
+using WebApi.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,7 @@ builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 
 var app = builder.Build();

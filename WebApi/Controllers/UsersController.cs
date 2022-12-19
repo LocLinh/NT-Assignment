@@ -50,8 +50,6 @@ namespace WebApi.Controllers
                 rngCsp.GetNonZeroBytes(initsalt);
             }
             string initSaltStr = Encoding.ASCII.GetString(initsalt);
-
-
             byte[] salt = Encoding.ASCII.GetBytes(initSaltStr);
             string saltStr = Encoding.ASCII.GetString(salt);
 

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
+using WebApi.Interface;
 using WebApi.Model;
-using WebApi.Repository;
 
 namespace WebApi.Controllers
 {

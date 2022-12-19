@@ -2,7 +2,7 @@
 using WebApi.Dto;
 using WebApi.Model;
 
-namespace WebApi.Repository
+namespace WebApi.Interface
 {
     public interface IProductRepository
     {

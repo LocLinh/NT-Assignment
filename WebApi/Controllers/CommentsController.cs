@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using WebApi.Data;
 using WebApi.Dto;
+using WebApi.Interface;
 using WebApi.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,11 +19,13 @@ namespace WebApi.Controllers
     {
         private readonly WebApiDbContext _context;
         public readonly IMapper _mapper;
+        private readonly ICommentRepository _commentRepository;
 
-        public CommentsController(WebApiDbContext context, IMapper mapper)
+        public CommentsController(WebApiDbContext context, IMapper mapper, ICommentRepository commentRepository)
         {
             _context = context;
             _mapper = mapper;
+            _commentRepository = commentRepository;
         }
 
         [Route("GetAllComments")]
@@ -38,6 +41,12 @@ namespace WebApi.Controllers
             return await _context.comments.Where(comment => comment.ProductId == productId)
                 .Include(comment => comment.Users)
                 .ToListAsync();
+        }
+
+        [HttpGet("GetReviewSummaryByProduct/{productId}")]
+        public async Task<CommentRatingDto> GetReviewSummaryByProduct(int productId)
+        {
+            return await _commentRepository.ProductReviewSummary(productId);
         }
 
         [HttpGet("GetAllCommentsByUser/{username}")]
@@ -102,15 +111,5 @@ namespace WebApi.Controllers
 
             return NotFound("Not found user or product");
         }
-
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
